@@ -14,5 +14,6 @@ class MainViewController: UIViewController {
     
     @IBAction func mainButtonAction(_ sender: Any) {
         NSLog("Main action triggered")
+        
     }
 }
