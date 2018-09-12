@@ -2,11 +2,17 @@
 import Foundation
 
 class ChecksumCollector {
-    var digest = [UInt8](repeating: 0, count: Int(CC_SHA512_DIGEST_LENGTH))
-    var state = CC_SHA512_CTX()
+    private var state = CC_SHA512_CTX()
+    private var digest = [UInt8](repeating: 0, count: Int(CC_SHA512_DIGEST_LENGTH))
     
     init() {
         CC_SHA512_Init(&state)
+    }
+    
+    var result: [UInt8] {
+        get {
+            return digest
+        }
     }
     
     func handleData(data: Data) {
