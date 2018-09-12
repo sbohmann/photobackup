@@ -16,6 +16,7 @@
 		9691D20521477DE600C16349 /* photobackupUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9691D20421477DE600C16349 /* photobackupUITests.swift */; };
 		9691D213214797D200C16349 /* Core.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9691D212214797D200C16349 /* Core.swift */; };
 		9691D2152148C52400C16349 /* AssetData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9691D2142148C52400C16349 /* AssetData.swift */; };
+		9691D2172149575F00C16349 /* ChecksumCollector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9691D2162149575F00C16349 /* ChecksumCollector.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +52,8 @@
 		9691D20621477DE600C16349 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9691D212214797D200C16349 /* Core.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Core.swift; sourceTree = "<group>"; };
 		9691D2142148C52400C16349 /* AssetData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetData.swift; sourceTree = "<group>"; };
+		9691D2162149575F00C16349 /* ChecksumCollector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChecksumCollector.swift; sourceTree = "<group>"; };
+		9691D21821495A2000C16349 /* BridgingHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BridgingHeader.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +112,8 @@
 				9691D1F021477DE600C16349 /* Info.plist */,
 				9691D212214797D200C16349 /* Core.swift */,
 				9691D2142148C52400C16349 /* AssetData.swift */,
+				9691D2162149575F00C16349 /* ChecksumCollector.swift */,
+				9691D21821495A2000C16349 /* BridgingHeader.h */,
 			);
 			path = photobackup;
 			sourceTree = "<group>";
@@ -266,6 +271,7 @@
 				9691D1E721477DE600C16349 /* MainViewController.swift in Sources */,
 				9691D1E521477DE600C16349 /* AppDelegate.swift in Sources */,
 				9691D213214797D200C16349 /* Core.swift in Sources */,
+				9691D2172149575F00C16349 /* ChecksumCollector.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -376,6 +382,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OBJC_BRIDGING_HEADER = photobackup/BridgingHeader.h;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -429,6 +436,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OBJC_BRIDGING_HEADER = photobackup/BridgingHeader.h;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;
 			};
