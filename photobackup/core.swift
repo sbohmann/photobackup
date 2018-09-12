@@ -22,7 +22,9 @@ class Core {
             NSLog("asset: %@, count: %d", asset, count)
             self.logSourceType(asset.sourceType)
             self.logMediaType(asset.mediaType)
+            self.logMediaSubtype(asset.mediaSubtypes)
             NSLog("size: %d x %d", asset.pixelWidth, asset.pixelHeight)
+            AssetData.handleAsset(asset)
         }
     }
     
@@ -50,5 +52,29 @@ class Core {
         case .audio:
             NSLog("audio")
         }
+    }
+    
+    func logMediaSubtype(_ subtype: PHAssetMediaSubtype) {
+        switch subtype {
+        case .photoPanorama:
+            NSLog("photoPanorama")
+        case .photoHDR:
+            NSLog("photoHDR")
+        case .photoScreenshot:
+            NSLog("photoScreenshot")
+        case .photoLive:
+            NSLog("photoLive")
+        case .photoDepthEffect:
+            NSLog("photoDepthEffect")
+        case .videoStreamed:
+            NSLog("videoStreamed")
+        case .videoHighFrameRate:
+            NSLog("videoHighFrameRate")
+        case .videoTimelapse:
+            NSLog("videoTimelapse")
+        default:
+            break
+        }
+        NSLog("%d", subtype.rawValue)
     }
 }
