@@ -1,81 +1,46 @@
 
 import Foundation
-import Photos
 
 class Core {
     func listPhotos() {
-        PHPhotoLibrary.requestAuthorization { status in self.listPhotosIfAuthorized(status: status)}
-    }
-    
-    func listPhotosIfAuthorized(status: PHAuthorizationStatus) {
-        if status == .authorized {
-            self.listPhotosWithAuthorization()
-        } else {
-            NSLog("authorization status: %@", status.rawValue)
+        AssetCollector.run { assets in
+            assets.forEach { asset in
+                NSLog("asset %@", asset.description)
+            }
+            
+            self.sendReport(assets)
         }
     }
     
-    func listPhotosWithAuthorization() {
-        let result = PHAsset.fetchAssets(with: nil)
-        NSLog("count: %d", result.count)
-        result.enumerateObjects { (asset, count, boolPointer) in
-            NSLog("asset: %@, count: %d", asset, count)
-            self.logSourceType(asset.sourceType)
-            self.logMediaType(asset.mediaType)
-            self.logMediaSubtype(asset.mediaSubtypes)
-            NSLog("size: %d x %d", asset.pixelWidth, asset.pixelHeight)
-            NSLog("creation date: %f", asset.creationDate?.timeIntervalSince1970 ?? 0.0)
-            AssetData.handleAsset(asset)
+    func sendReport(_ assets: [Asset]) {
+        let url = URL(string: "http://127.0.0.1:8080/reportAssets")!
+        var request = URLRequest(url: url)
+        do {
+            let data = try JSONEncoder().encode(AssetReport(descriptions: [ImageDescription]()))
+            let task = URLSession.shared.uploadTask(with: request, from: data)
+            task.resume()
+        } catch {
+            NSLog("error: %@", error.localizedDescription)
         }
     }
     
-    func logSourceType(_ type: PHAssetSourceType) {
-        switch type {
-        case .typeUserLibrary:
-            NSLog("user library")
-        case .typeCloudShared:
-            NSLog("cloud shared")
-        case .typeiTunesSynced:
-            NSLog("itunes synced")
-        default:
-            NSLog("unknown value: %d", type.rawValue)
+    func uploadResource(_ resource: Resource) {
+        let url = URL(string: "http://127.0.0.1:8080/resourceUpload")!
+        
+        var boundInputStream: InputStream?
+        var boundOutputStream: OutputStream?
+        Stream.getBoundStreams(withBufferSize: 1024 * 1024, inputStream: &boundInputStream, outputStream: &boundOutputStream)
+        
+        guard let inputStream = boundInputStream, let outputStream = boundOutputStream else {
+            // TODO handle error
+            return
         }
-    }
-    
-    func logMediaType(_ type: PHAssetMediaType) {
-        switch type {
-        case .unknown:
-            NSLog("unknown")
-        case .image:
-            NSLog("image")
-        case .video:
-            NSLog("video")
-        case .audio:
-            NSLog("audio")
-        }
-    }
-    
-    func logMediaSubtype(_ subtype: PHAssetMediaSubtype) {
-        switch subtype {
-        case .photoPanorama:
-            NSLog("photoPanorama")
-        case .photoHDR:
-            NSLog("photoHDR")
-        case .photoScreenshot:
-            NSLog("photoScreenshot")
-        case .photoLive:
-            NSLog("photoLive")
-        case .photoDepthEffect:
-            NSLog("photoDepthEffect")
-        case .videoStreamed:
-            NSLog("videoStreamed")
-        case .videoHighFrameRate:
-            NSLog("videoHighFrameRate")
-        case .videoTimelapse:
-            NSLog("videoTimelapse")
-        default:
-            break
-        }
-        NSLog("%d", subtype.rawValue)
+        
+        var request = URLRequest(url: url)
+        request.httpBodyStream = inputStream
+        
+        let task = URLSession.shared.uploadTask(withStreamedRequest: request)
+        
+        // TODO
     }
 }

@@ -1,6 +1,10 @@
 
 import Foundation
 
+func blockToString(_ block: [UInt8]) -> String {
+    return block.map({ String(format: "%02hhx", $0) }).joined(separator: "")
+}
+
 func parseBlock(_ string: String, _ length: Int) throws -> [UInt8] {
     try checkStringLength(string, length)
     var value = [UInt8](repeating: 0, count: length)
