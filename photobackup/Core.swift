@@ -26,6 +26,16 @@ class Core {
                 data?.withUnsafeBytes({ (pointer: UnsafePointer<CChar>) in
                     NSLog("%s", pointer)
                 })
+                do {
+                    if let data = data {
+                        let result = try JSONDecoder().decode(MissingAssets.self, from: data)
+                        NSLog("%@", result.description)
+                    } else {
+                        NSLog("Failed to decode data")
+                    }
+                } catch {
+                    NSLog("%@", error.localizedDescription)
+                }
             }
             task.resume()
         } catch {

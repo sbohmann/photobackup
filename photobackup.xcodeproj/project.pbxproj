@@ -31,6 +31,7 @@
 		9691D235214A5A9700C16349 /* Resource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9691D234214A5A9700C16349 /* Resource.swift */; };
 		9691D237214A740D00C16349 /* PhotoKitEnums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9691D236214A740D00C16349 /* PhotoKitEnums.swift */; };
 		9691D239214A888100C16349 /* AssetReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9691D238214A888100C16349 /* AssetReport.swift */; };
+		9691D23B214AC44C00C16349 /* MissingAssets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9691D23A214AC44C00C16349 /* MissingAssets.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -82,6 +83,7 @@
 		9691D234214A5A9700C16349 /* Resource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Resource.swift; sourceTree = "<group>"; };
 		9691D236214A740D00C16349 /* PhotoKitEnums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoKitEnums.swift; sourceTree = "<group>"; };
 		9691D238214A888100C16349 /* AssetReport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetReport.swift; sourceTree = "<group>"; };
+		9691D23A214AC44C00C16349 /* MissingAssets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissingAssets.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -175,6 +177,7 @@
 				9691D21C214A19BF00C16349 /* ImageDescription.swift */,
 				9691D21F214A19BF00C16349 /* ImageUploadResponse.swift */,
 				9691D238214A888100C16349 /* AssetReport.swift */,
+				9691D23A214AC44C00C16349 /* MissingAssets.swift */,
 			);
 			path = api;
 			sourceTree = "<group>";
@@ -344,6 +347,7 @@
 				9691D213214797D200C16349 /* Core.swift in Sources */,
 				9691D22A214A397300C16349 /* CheckSize.swift in Sources */,
 				9691D223214A19C000C16349 /* Checksum.swift in Sources */,
+				9691D23B214AC44C00C16349 /* MissingAssets.swift in Sources */,
 				9691D232214A554300C16349 /* Asset.swift in Sources */,
 				9691D225214A19C000C16349 /* ImageUploadResponse.swift in Sources */,
 				9691D22C214A3B8700C16349 /* Block.swift in Sources */,
