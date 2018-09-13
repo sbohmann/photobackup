@@ -3,9 +3,11 @@ struct ImageDescription : CustomStringConvertible, Encodable {
     // TODO location information from PHAsset
     // TODO creation timestamp, name, tags, &c.
     
+    let name: String
+    
     var description: String {
         get {
-            return "ImageDescription{}"
+            return "ImageDescription{name=\(name)}"
         }
     }
 }

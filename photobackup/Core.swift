@@ -13,11 +13,20 @@ class Core {
     }
     
     func sendReport(_ assets: [Asset]) {
-        let url = URL(string: "http://127.0.0.1:8080/reportAssets")!
+        let url = URL(string: "http://127.0.0.1:8080/image-upload/asset-report")!
         var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-type")
         do {
-            let data = try JSONEncoder().encode(AssetReport(descriptions: [ImageDescription]()))
-            let task = URLSession.shared.uploadTask(with: request, from: data)
+            let data = try JSONEncoder().encode(AssetReport(descriptions: [ImageDescription(name: "hello")]))
+            let task = URLSession.shared.uploadTask(with: request, from: data) { data, response, error in
+                NSLog("%d", data?.count ?? -1)
+                NSLog("%@", response?.description ?? "no response")
+                NSLog("%@", error?.localizedDescription ?? "no error")
+                data?.withUnsafeBytes({ (pointer: UnsafePointer<CChar>) in
+                    NSLog("%s", pointer)
+                })
+            }
             task.resume()
         } catch {
             NSLog("error: %@", error.localizedDescription)
