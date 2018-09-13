@@ -9,7 +9,7 @@ class AssetData {
 //
 //    For videos: requestExportSessionForVideo
     
-    class func handleAsset(_ asset: PHAsset) {
+    static func handleAsset(_ asset: PHAsset) {
         NSLog("asset local identifier: %@", asset.localIdentifier)
         let resources = PHAssetResource.assetResources(for: asset)
         for resource in resources {

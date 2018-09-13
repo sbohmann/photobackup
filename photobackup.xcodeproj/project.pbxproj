@@ -17,6 +17,15 @@
 		9691D213214797D200C16349 /* Core.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9691D212214797D200C16349 /* Core.swift */; };
 		9691D2152148C52400C16349 /* AssetData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9691D2142148C52400C16349 /* AssetData.swift */; };
 		9691D2172149575F00C16349 /* ChecksumCollector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9691D2162149575F00C16349 /* ChecksumCollector.swift */; };
+		9691D220214A19C000C16349 /* DeviceId.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9691D21A214A19BF00C16349 /* DeviceId.swift */; };
+		9691D221214A19C000C16349 /* FilePresent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9691D21B214A19BF00C16349 /* FilePresent.swift */; };
+		9691D222214A19C000C16349 /* ImageDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9691D21C214A19BF00C16349 /* ImageDescription.swift */; };
+		9691D223214A19C000C16349 /* Checksum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9691D21D214A19BF00C16349 /* Checksum.swift */; };
+		9691D224214A19C000C16349 /* FileDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9691D21E214A19BF00C16349 /* FileDescription.swift */; };
+		9691D225214A19C000C16349 /* ImageUploadResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9691D21F214A19BF00C16349 /* ImageUploadResponse.swift */; };
+		9691D228214A38A700C16349 /* InvalidArgument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9691D227214A38A700C16349 /* InvalidArgument.swift */; };
+		9691D22A214A397300C16349 /* CheckSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9691D229214A397300C16349 /* CheckSize.swift */; };
+		9691D22C214A3B8700C16349 /* ParseBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9691D22B214A3B8700C16349 /* ParseBlock.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +63,15 @@
 		9691D2142148C52400C16349 /* AssetData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetData.swift; sourceTree = "<group>"; };
 		9691D2162149575F00C16349 /* ChecksumCollector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChecksumCollector.swift; sourceTree = "<group>"; };
 		9691D21821495A2000C16349 /* BridgingHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BridgingHeader.h; sourceTree = "<group>"; };
+		9691D21A214A19BF00C16349 /* DeviceId.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceId.swift; sourceTree = "<group>"; };
+		9691D21B214A19BF00C16349 /* FilePresent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilePresent.swift; sourceTree = "<group>"; };
+		9691D21C214A19BF00C16349 /* ImageDescription.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageDescription.swift; sourceTree = "<group>"; };
+		9691D21D214A19BF00C16349 /* Checksum.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Checksum.swift; sourceTree = "<group>"; };
+		9691D21E214A19BF00C16349 /* FileDescription.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileDescription.swift; sourceTree = "<group>"; };
+		9691D21F214A19BF00C16349 /* ImageUploadResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageUploadResponse.swift; sourceTree = "<group>"; };
+		9691D227214A38A700C16349 /* InvalidArgument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvalidArgument.swift; sourceTree = "<group>"; };
+		9691D229214A397300C16349 /* CheckSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckSize.swift; sourceTree = "<group>"; };
+		9691D22B214A3B8700C16349 /* ParseBlock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParseBlock.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +102,8 @@
 		9691D1D821477DE600C16349 = {
 			isa = PBXGroup;
 			children = (
+				9691D226214A387100C16349 /* basics */,
+				9691D219214A186B00C16349 /* api */,
 				9691D1E321477DE600C16349 /* photobackup */,
 				9691D1F821477DE600C16349 /* photobackupTests */,
 				9691D20321477DE600C16349 /* photobackupUITests */,
@@ -134,6 +154,29 @@
 				9691D20621477DE600C16349 /* Info.plist */,
 			);
 			path = photobackupUITests;
+			sourceTree = "<group>";
+		};
+		9691D219214A186B00C16349 /* api */ = {
+			isa = PBXGroup;
+			children = (
+				9691D21D214A19BF00C16349 /* Checksum.swift */,
+				9691D21A214A19BF00C16349 /* DeviceId.swift */,
+				9691D21E214A19BF00C16349 /* FileDescription.swift */,
+				9691D21B214A19BF00C16349 /* FilePresent.swift */,
+				9691D21C214A19BF00C16349 /* ImageDescription.swift */,
+				9691D21F214A19BF00C16349 /* ImageUploadResponse.swift */,
+			);
+			path = api;
+			sourceTree = "<group>";
+		};
+		9691D226214A387100C16349 /* basics */ = {
+			isa = PBXGroup;
+			children = (
+				9691D227214A38A700C16349 /* InvalidArgument.swift */,
+				9691D229214A397300C16349 /* CheckSize.swift */,
+				9691D22B214A3B8700C16349 /* ParseBlock.swift */,
+			);
+			path = basics;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -267,10 +310,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9691D222214A19C000C16349 /* ImageDescription.swift in Sources */,
+				9691D220214A19C000C16349 /* DeviceId.swift in Sources */,
 				9691D2152148C52400C16349 /* AssetData.swift in Sources */,
 				9691D1E721477DE600C16349 /* MainViewController.swift in Sources */,
+				9691D224214A19C000C16349 /* FileDescription.swift in Sources */,
+				9691D221214A19C000C16349 /* FilePresent.swift in Sources */,
 				9691D1E521477DE600C16349 /* AppDelegate.swift in Sources */,
 				9691D213214797D200C16349 /* Core.swift in Sources */,
+				9691D22A214A397300C16349 /* CheckSize.swift in Sources */,
+				9691D223214A19C000C16349 /* Checksum.swift in Sources */,
+				9691D225214A19C000C16349 /* ImageUploadResponse.swift in Sources */,
+				9691D22C214A3B8700C16349 /* ParseBlock.swift in Sources */,
+				9691D228214A38A700C16349 /* InvalidArgument.swift in Sources */,
 				9691D2172149575F00C16349 /* ChecksumCollector.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

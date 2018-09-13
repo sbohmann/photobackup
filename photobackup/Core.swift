@@ -24,6 +24,7 @@ class Core {
             self.logMediaType(asset.mediaType)
             self.logMediaSubtype(asset.mediaSubtypes)
             NSLog("size: %d x %d", asset.pixelWidth, asset.pixelHeight)
+            NSLog("creation date: %f", asset.creationDate?.timeIntervalSince1970 ?? 0.0)
             AssetData.handleAsset(asset)
         }
     }
