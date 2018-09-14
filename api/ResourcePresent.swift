@@ -1,5 +1,5 @@
 
-public class FilePresent: CustomStringConvertible {
+public class ResourcePresent: CustomStringConvertible {
     static let Yes = "6c34e454bfb6ced8"
     static let No = "367011a20b690e6a"
 

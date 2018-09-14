@@ -47,9 +47,9 @@ class AssetCollector {
                 : nil
             
             let collector = ChecksumCollector() { checksum in
-                resourcesForAsset.append(Resource(checksum: checksum, rawResource: resource, fileName: fileName, fileSize: fileSize))
+                resourcesForAsset.append(Resource(checksum: checksum, rawResource: resource, fileName: fileName, fileSize: clongToINt64(fileSize), creationDate: asset.creationDate))
                 if (resourcesForAsset.count == resources.count) {
-                    self.addAsset(Asset(resources: resourcesForAsset, rawAsset: asset))
+                    self.addAsset(Asset(name: asset.localIdentifier, creationDate: asset.creationDate, resources: resourcesForAsset, rawAsset: asset))
                 }
             }
             

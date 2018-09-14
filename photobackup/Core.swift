@@ -18,7 +18,23 @@ class Core {
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-type")
         do {
-            let data = try JSONEncoder().encode(AssetReport(descriptions: [ImageDescription(name: "hello")]))
+            let descriptions: [AssetDescription] = assets.map { asset in
+                let resourceDescriptions: [ResourceDescription] = asset.resources.map { resource in
+                    return ResourceDescription(
+                        checksum: Checksum(value: resource.checksum),
+                        size: resource.fileSize,
+                        name: resource.fileName,
+                        creationDateMs: dateToMillisecondTimestamp(resource.creationDate))
+                }
+                return AssetDescription(
+                    name: asset.name,
+                    creationDateMs: dateToMillisecondTimestamp(asset.creationDate),
+                    resourceDescriptions: resourceDescriptions)
+            }
+            let data = try JSONEncoder().encode(AssetReport(descriptions: descriptions))
+            data.withUnsafeBytes({ (pointer: UnsafePointer<CChar>) in
+                NSLog("Sending json: %s", pointer)
+            })
             let task = URLSession.shared.uploadTask(with: request, from: data) { data, response, error in
                 NSLog("%d", data?.count ?? -1)
                 NSLog("%@", response?.description ?? "no response")

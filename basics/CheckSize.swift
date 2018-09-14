@@ -2,9 +2,9 @@
 import Foundation
 
 extension Collection {
-    func CheckSize(_ size: Int) throws {
+    func CheckSize(_ size: Int) {
         if (count != size) {
-            throw InvalidArgument("count [\(count)] != size [\(size)]")
+            fatalError("count [\(count)] != size [\(size)]")
         }
     }
 }

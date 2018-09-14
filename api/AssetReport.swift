@@ -2,7 +2,7 @@
 import Foundation
 
 struct AssetReport : CustomStringConvertible, Encodable {
-    let descriptions: [ImageDescription]
+    let descriptions: [AssetDescription]
     
     public var description: String {
         get{

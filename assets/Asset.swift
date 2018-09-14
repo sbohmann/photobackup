@@ -3,6 +3,8 @@ import Foundation
 import Photos
 
 struct Asset : CustomStringConvertible {
+    let name: String
+    let creationDate: Date?
     let resources: [Resource]
     let rawAsset: PHAsset
     

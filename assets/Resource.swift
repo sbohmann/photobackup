@@ -6,7 +6,8 @@ struct Resource : CustomStringConvertible {
     let checksum: [UInt8]
     let rawResource: PHAssetResource
     let fileName: String?
-    let fileSize: CLong?
+    let fileSize: Int64?
+    let creationDate: Date?
     
     var description: String {
         get {

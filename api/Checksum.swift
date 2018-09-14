@@ -4,8 +4,8 @@ private let Length = 64
 struct Checksum : CustomStringConvertible, Codable {
     let value: [UInt8]
 
-    init(value: [UInt8]) throws {
-        try value.CheckSize(Length)
+    init(value: [UInt8]) {
+        value.CheckSize(Length)
         self.value = value
     }
 
