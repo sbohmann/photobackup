@@ -3,21 +3,21 @@ import Foundation
 import Photos
 
 class Core {
-    func listAssets(resultHandler: @escaping ([Asset], MissingAssets) -> ()) {
-        AssetCollector.run { assets in
-            assets.forEach { asset in
-                NSLog("asset %@", asset.description)
-            }
-            
-            self.sendReport(assets: assets) { missingAssets in
-                resultHandler(assets, missingAssets)
-            }
-        }
+    func listAssets(resultHandler: @escaping ([Asset], MissingAssets) -> (), statusHandler: @escaping (String, Float?) -> ()) {
+        AssetCollector.run(
+            resultHandler: { assets in
+                NSLog("rporting %d assets", assets.count )
+
+                self.sendReport(assets: assets) { missingAssets in
+                    resultHandler(assets, missingAssets)
+                }
+            },
+            statusHandler: statusHandler)
     }
     
     func sendReport(assets: [Asset], resultHandler: @escaping (MissingAssets) -> ()) {
         NSLog("on main thread before: %@", Thread.isMainThread ? "true" : "false")
-        let url = URL(string: "http://127.0.0.1:8080/asset-report")!
+        let url = URL(string: "http://10.0.0.39:8080/asset-report")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-type")
@@ -36,9 +36,6 @@ class Core {
                     resourceDescriptions: resourceDescriptions)
             }
             let data = try JSONEncoder().encode(AssetReport(descriptions: descriptions))
-            data.withUnsafeBytes({ (pointer: UnsafePointer<CChar>) in
-                NSLog("Sending json: %s", pointer)
-            })
             let task = URLSession.shared.uploadTask(with: request, from: data) { data, response, error in
                 self.reportCompletion(data, response, error)
                 do {
@@ -67,7 +64,7 @@ class Core {
             return
         }
         
-        let url = URL(string: "http://127.0.0.1:8080/resource-upload/" + blockToString(resource.checksum))!
+        let url = URL(string: "http://10.0.0.39:8080/resource-upload/" + blockToString(resource.checksum))!
         
         var boundInputStream: InputStream?
         var boundOutputStream: OutputStream?
@@ -91,7 +88,7 @@ class Core {
             self.reportCompletion(data, response, error)
         })
         if let size = resource.fileSize {
-            NSLog("set size to %d", size)
+            NSLog("size: %d", size)
         }
         task.resume()
         outputStream.open()
@@ -155,11 +152,13 @@ class Core {
     }
     
     func reportCompletion(_ data: Data?, _ response: URLResponse?, _ error: Error?) {
-        NSLog("%d", data?.count ?? 0)
-        NSLog("%@", response?.description ?? "no response")
-        NSLog("%@", error?.localizedDescription ?? "no error")
-        data?.withUnsafeBytes({ (pointer: UnsafePointer<CChar>) in
-            NSLog("%s", pointer)
-        })
+        DispatchQueue.main.async {
+            NSLog("%d", data?.count ?? 0)
+            NSLog("%@", response?.description ?? "no response")
+            NSLog("%@", error?.localizedDescription ?? "no error")
+            data?.withUnsafeBytes({ (pointer: UnsafePointer<CChar>) in
+                NSLog("%s", pointer)
+            })
+        }
     }
 }

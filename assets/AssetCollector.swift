@@ -4,17 +4,19 @@ import Photos
 
 class AssetCollector {
     private let resultHandler: ([Asset]) -> ()
+    private var statusHandler: (String, Float?) -> ()
     private var assets = [Asset]()
-    private var rawAssets: PHFetchResult<PHAsset>!
+    private var assetCount = 0
     
-    static func run(resultHandler: @escaping ([Asset]) -> ()) {
+    static func run(resultHandler: @escaping ([Asset]) -> (), statusHandler: @escaping (String, Float?) -> ()) {
         PHPhotoLibrary.requestAuthorization { status in
-            AssetCollector(resultHandler).runIfAuthorized(status: status)
+            AssetCollector(resultHandler, statusHandler).runIfAuthorized(status: status)
         }
     }
     
-    private init(_ resultHandler: @escaping ([Asset]) -> ()) {
+    private init(_ resultHandler: @escaping ([Asset]) -> (), _ statusHandler: @escaping (String, Float?) -> ()) {
         self.resultHandler = resultHandler
+        self.statusHandler = statusHandler
     }
     
     private func runIfAuthorized(status: PHAuthorizationStatus) {
@@ -26,17 +28,33 @@ class AssetCollector {
     }
     
     private func runWithAuthorization() {
-        rawAssets = PHAsset.fetchAssets(with: nil)
-        NSLog("count: %d", rawAssets.count)
-        rawAssets.enumerateObjects { (asset, count, boolPointer) in
-            self.handleRawAsset(asset)
+        let collections = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .smartAlbumUserLibrary, options: nil)
+        var fetchResults = [PHFetchResult<PHAsset>]()
+        
+        collections.enumerateObjects {collection, count, pointer in
+            NSLog("Collections name: %@, type: %d/%d", collection.description, collection.assetCollectionType.rawValue, collection.assetCollectionSubtype.rawValue)
+            let fetchResult = PHAsset.fetchAssets(in: collection, options: nil)
+            NSLog("count: %d", fetchResult.count)
+            self.assetCount += fetchResult.count
+            fetchResults.append(fetchResult)
+        }
+        
+        for fetchResult in fetchResults {
+            fetchResult.enumerateObjects { (asset, count, boolPointer) in
+                self.handleRawAsset(asset)
+            }
         }
     }
     
     private func handleRawAsset(_ asset: PHAsset) {
-        NSLog("asset local identifier: %@", asset.localIdentifier)
         let resources = PHAssetResource.assetResources(for: asset)
+        if (resources.isEmpty) {
+            assetCount -= 1
+            reportIfFinished()
+            return
+        }
         var resourcesForAsset = [Resource]()
+        var skippedResources = 0
         for resource in resources {
             let fileName = resource.responds(to: Selector("originalFilename"))
                 ? resource.value(forKey: "originalFilename") as? String
@@ -47,9 +65,18 @@ class AssetCollector {
                 : nil
             
             let collector = ChecksumCollector() { checksum in
-                resourcesForAsset.append(Resource(checksum: checksum, rawResource: resource, fileName: fileName, fileSize: clongToINt64(fileSize), creationDate: asset.creationDate))
-                if (resourcesForAsset.count == resources.count) {
-                    self.addAsset(Asset(name: asset.localIdentifier, creationDate: asset.creationDate, resources: resourcesForAsset, rawAsset: asset))
+                if let checksum = checksum {
+                    resourcesForAsset.append(Resource(checksum: checksum, rawResource: resource, fileName: fileName, fileSize: clongToINt64(fileSize), creationDate: asset.creationDate))
+                } else {
+                    skippedResources += 1
+                }
+                if resourcesForAsset.count + skippedResources == resources.count {
+                    if resourcesForAsset.count > 0 {
+                        self.addAsset(Asset(name: asset.localIdentifier, creationDate: asset.creationDate, resources: resourcesForAsset, rawAsset: asset))
+                    } else {
+                        self.assetCount -= 1
+                        self.reportIfFinished()
+                    }
                 }
             }
             
@@ -63,8 +90,18 @@ class AssetCollector {
     
     private func addAsset(_ asset: Asset) {
         assets.append(asset)
-        if (assets.count == rawAssets.count) {
-            resultHandler(assets)
+        reportIfFinished()
+    }
+    
+    private func reportIfFinished() {
+        let message = "collected \(assets.count) out of \(assetCount) assets"
+        DispatchQueue.main.async {
+            self.statusHandler(message, self.assetCount > 0 ? Float(self.assets.count) / Float(self.assetCount) : 0.0)
+        }
+        if (assets.count == assetCount) {
+            DispatchQueue.main.async {
+                self.resultHandler(self.assets)
+            }
         }
     }
 }
