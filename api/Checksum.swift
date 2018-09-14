@@ -1,7 +1,18 @@
 
 private let Length = 64
 
-struct Checksum : CustomStringConvertible, Codable {
+struct Checksum : CustomStringConvertible, Codable, Hashable {
+    var hashValue: Int {
+        get {
+            var result = 0
+            for byte in value {
+                result = result &+ Int(byte)
+                result = result &* ReasonablePrime
+            }
+            return result
+        }
+    }
+    
     let value: [UInt8]
 
     init(value: [UInt8]) {

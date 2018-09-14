@@ -33,6 +33,7 @@
 		9691D23B214AC44C00C16349 /* MissingAssets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9691D23A214AC44C00C16349 /* MissingAssets.swift */; };
 		9691D23D214BBDF200C16349 /* ResourceDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9691D23C214BBDF100C16349 /* ResourceDescription.swift */; };
 		9691D23F214BCA5E00C16349 /* NumberConversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9691D23E214BCA5E00C16349 /* NumberConversion.swift */; };
+		9691D241214BE67600C16349 /* Hashing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9691D240214BE67600C16349 /* Hashing.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -86,6 +87,7 @@
 		9691D23A214AC44C00C16349 /* MissingAssets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissingAssets.swift; sourceTree = "<group>"; };
 		9691D23C214BBDF100C16349 /* ResourceDescription.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResourceDescription.swift; sourceTree = "<group>"; };
 		9691D23E214BCA5E00C16349 /* NumberConversion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberConversion.swift; sourceTree = "<group>"; };
+		9691D240214BE67600C16349 /* Hashing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hashing.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -193,6 +195,7 @@
 				9691D22D214A49C600C16349 /* DateConversion.swift */,
 				9691D236214A740D00C16349 /* PhotoKitEnums.swift */,
 				9691D23E214BCA5E00C16349 /* NumberConversion.swift */,
+				9691D240214BE67600C16349 /* Hashing.swift */,
 			);
 			path = basics;
 			sourceTree = "<group>";
@@ -341,6 +344,7 @@
 			files = (
 				9691D237214A740D00C16349 /* PhotoKitEnums.swift in Sources */,
 				9691D222214A19C000C16349 /* AssetDescription.swift in Sources */,
+				9691D241214BE67600C16349 /* Hashing.swift in Sources */,
 				9691D23D214BBDF200C16349 /* ResourceDescription.swift in Sources */,
 				9691D220214A19C000C16349 /* DeviceId.swift in Sources */,
 				9691D1E721477DE600C16349 /* MainViewController.swift in Sources */,

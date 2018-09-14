@@ -2,7 +2,7 @@
 import Foundation
 
 func blockToString(_ block: [UInt8]) -> String {
-    return block.map({ String(format: "%02hhx", $0) }).joined(separator: "")
+    return block.map({ String(format: "%02hhX", $0) }).joined(separator: "")
 }
 
 func parseBlock(_ string: String, _ length: Int) throws -> [UInt8] {

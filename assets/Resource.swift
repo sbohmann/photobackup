@@ -11,7 +11,7 @@ struct Resource : CustomStringConvertible {
     
     var description: String {
         get {
-            let hexChecksum = checksum.map({ String(format: "%02hhx", $0) }).joined(separator: "")
+            let hexChecksum = blockToString(checksum)
             return "Resource{checksum=\(hexChecksum), rawResource=\(rawResource)"
         }
     }
