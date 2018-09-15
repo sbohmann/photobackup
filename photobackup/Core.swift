@@ -3,7 +3,13 @@ import Foundation
 import Photos
 
 class Core {
-    func listAssets(resultHandler: @escaping ([Asset], MissingAssets) -> (), statusHandler: @escaping (String, Float?) -> ()) {
+    let statusHandler: (String, Float?) -> ()
+    
+    init(statusHandler: @escaping (String, Float?) -> ()) {
+        self.statusHandler = statusHandler
+    }
+    
+    func listAssets(resultHandler: @escaping ([Asset], MissingAssets) -> ()) {
         AssetCollector.run(
             resultHandler: { assets in
                 NSLog("rporting %d assets", assets.count )
@@ -59,9 +65,14 @@ class Core {
         }
     }
     
-    func upload(resources: [Resource]) {
+    func upload(resources: [Resource], numberOfResources: Int) {
         guard let resource = resources.first else {
             return
+        }
+        
+        if numberOfResources > 0 {
+            let resourcesFinished = numberOfResources - resources.count
+            statusHandler("Uploading resource \(resourcesFinished + 1) / \(numberOfResources)", Float(resourcesFinished) / Float(numberOfResources))
         }
         
         let url = URL(string: "http://10.0.0.39:8080/resource-upload/" + blockToString(resource.checksum))!
@@ -125,10 +136,18 @@ class Core {
             } else {
                 NSLog("Finished writing resource [%@]", resource.fileName?.description ?? "")
             }
+            // TODO move starting next upload to task completion or, even better, just limit parallel uploads
+            // task completion is risky because it doesn't always happen... (e.g. in the face of some exceptions on the server
+            // continuing is really important because this is a photo backup app.
             let rest = [Resource](resources[1...])
             if !rest.isEmpty {
                 DispatchQueue.main.async {
-                    self.upload(resources: rest)
+                    self.upload(resources: rest, numberOfResources: numberOfResources)
+                }
+            } else {
+                DispatchQueue.main.async {
+                    // TODO report number of errors!!!
+                    self.statusHandler("Finished uploading resources.", 1.0)
                 }
             }
         }
