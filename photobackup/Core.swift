@@ -96,43 +96,39 @@ class Core {
         var error = false
         
         let handleData = { (data: Data) in
-            DispatchQueue.main.async {
-                var part = data
-                if error {
-                    return
+            var part = data
+            if error {
+                return
+            }
+            while part.count > 0 {
+                let result = part.withUnsafeBytes({ bytes in outputStream.write(bytes, maxLength: part.count)})
+                NSLog("write result: %d", result)
+                if (result < 0) {
+                    NSLog("error writing to stream: %@", outputStream.streamError?.localizedDescription ?? "<unknown>")
+                    outputStream.close()
+                    // TODO report error
+                    error = true
+                    break
                 }
-                while part.count > 0 {
-                    let result = part.withUnsafeBytes({ bytes in outputStream.write(bytes, maxLength: part.count)})
-                    NSLog("write result: %d", result)
-                    if (result < 0) {
-                        NSLog("error writing to stream: %@", outputStream.streamError?.localizedDescription ?? "<unknown>")
-                        outputStream.close()
-                        // TODO report error
-                        error = true
-                        break
-                    }
-                    NSLog("%d bytes written", result)
-                    if (result == part.count) {
-                        break
-                    }
-                    part = part.advanced(by: result)
+                NSLog("%d bytes written", result)
+                if (result == part.count) {
+                    break
                 }
+                part = part.advanced(by: result)
             }
         }
         
         let handleCompletion = { (error: Error?) in
-            DispatchQueue.main.async {
-                outputStream.close()
-                if let error = error {
-                    NSLog("error reading resource [%@]: %@", resource.fileName?.description ?? "", error.localizedDescription)
-                } else {
-                    NSLog("Finished writing resource [%@]", resource.fileName?.description ?? "")
-                }
-                let rest = [Resource](resources[1...])
-                if !rest.isEmpty {
-                    DispatchQueue.main.async {
-                        self.upload(resources: rest)
-                    }
+            outputStream.close()
+            if let error = error {
+                NSLog("error reading resource [%@]: %@", resource.fileName?.description ?? "", error.localizedDescription)
+            } else {
+                NSLog("Finished writing resource [%@]", resource.fileName?.description ?? "")
+            }
+            let rest = [Resource](resources[1...])
+            if !rest.isEmpty {
+                DispatchQueue.main.async {
+                    self.upload(resources: rest)
                 }
             }
         }
