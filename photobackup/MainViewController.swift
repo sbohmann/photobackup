@@ -25,6 +25,10 @@ class MainViewController: UIViewController {
         core.listAssets { assets, missingAssets in
             let missingAssetChecksums = Set<Checksum>(missingAssets.missingAssetChecksums)
             var filteredResources = [Resource]()
+            if missingAssets.missingAssetChecksums.isEmpty {
+                self.textbox.text = "No missing files reported"
+                self.progressbar.progress = 1.0
+            }
             assets.forEach { asset in
                 filteredResources.append(
                     contentsOf: asset
