@@ -24,20 +24,16 @@ struct Checksum : CustomStringConvertible, Codable, Hashable {
         self.value = try parseBlock(checksumString, Length)
     }
     
-    enum CodingKeys : CodingKey {
-        case value
-    }
-    
     init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        let checksumString = try container.decode(String.self, forKey: .value)
+        let container = try decoder.singleValueContainer()
+        let checksumString = try container.decode(String.self)
         self.value = try parseBlock(checksumString, Length)
     }
     
     func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
+        var container = encoder.singleValueContainer()
         let checksumString = blockToString(value)
-        try container.encode(checksumString, forKey: .value)
+        try container.encode(checksumString)
     }
 
     public var description: String {

@@ -10,10 +10,19 @@ import XCTest
 @testable import photobackup
 
 class photobackupTests: XCTestCase {
+    var checksumString: String!
+    var jsonRepresentation: String!
+    var checksum: Checksum!
     
     override func setUp() {
         super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        do {
+            checksumString = "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+            jsonRepresentation = "[\"" + checksumString.uppercased() + "\"]"
+            checksum = try Checksum(checksumString: checksumString)
+        } catch {
+            fatalError(error.localizedDescription)
+        }
     }
     
     override func tearDown() {
@@ -21,16 +30,22 @@ class photobackupTests: XCTestCase {
         super.tearDown()
     }
     
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    func testChecksumToJson() throws {
+        let value = [checksum]
+        let data = try JSONEncoder().encode(value)
+        let jsonRepresentation = String(data: data, encoding: .utf8)!
+        XCTAssertEqual(self.jsonRepresentation, jsonRepresentation)
     }
     
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
+    func testChecksumFromJson() throws {
+        let value = try JSONDecoder().decode([Checksum].self, from: jsonRepresentation.data(using: .utf8)!)
+        XCTAssertEqual(checksum, value.first!)
     }
     
+//    func testPerformanceExample() {
+//        // This is an example of a performance test case.
+//        self.measure {
+//            // Put the code you want to measure the time of here.
+//        }
+//    }
 }
