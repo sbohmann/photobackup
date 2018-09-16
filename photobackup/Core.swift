@@ -171,9 +171,9 @@ class Core {
             NSLog("%d", data?.count ?? 0)
             NSLog("%@", response?.description ?? "no response")
             NSLog("%@", error?.localizedDescription ?? "no error")
-            data?.withUnsafeBytes({ (pointer: UnsafePointer<CChar>) in
-                NSLog("%s", pointer)
-            })
+//            data?.withUnsafeBytes({ (pointer: UnsafePointer<CChar>) in
+//                NSLog("%s", pointer)
+//            })
         }
     }
 }
