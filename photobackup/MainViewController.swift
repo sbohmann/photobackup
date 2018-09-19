@@ -3,6 +3,7 @@ import UIKit
 
 class MainViewController: UIViewController {
     var running = false
+    @IBOutlet weak var mainButton: UIButton!
     @IBOutlet weak var textbox: UITextView!
     @IBOutlet weak var progressbar: UIProgressView!
     var core: Core!
@@ -21,6 +22,7 @@ class MainViewController: UIViewController {
     
     @IBAction func mainButtonAction(_ sender: Any) {
         NSLog("Main action triggered")
+        mainButton.isEnabled = false
         running = true
         core.listAssets { assets, missingAssets in
             let missingAssetChecksums = Set<Checksum>(missingAssets.missingAssetChecksums)

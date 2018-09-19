@@ -52,6 +52,7 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
+                        <outlet property="mainButton" destination="v34-2V-Z4E" id="86a-1W-QFI"/>
                         <outlet property="progressbar" destination="lyH-er-StD" id="C1Y-Ag-j54"/>
                         <outlet property="textbox" destination="PLW-WT-R9g" id="pTt-XQ-l3h"/>
                     </connections>
