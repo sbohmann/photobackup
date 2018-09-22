@@ -25,14 +25,10 @@ class ChecksumCollector {
         if let error = error {
             // TODO handle error
             NSLog("Error: %@", error.localizedDescription)
-            DispatchQueue.main.async {
-                self.resultHandler(nil)
-            }
+            self.resultHandler(nil)
         } else {
             CC_SHA512_Final(&digest, &state)
-            DispatchQueue.main.async {
-                self.resultHandler(self.digest)
-            }
+            self.resultHandler(self.digest)
         }
     }
 }

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		96253BC8215642A9005D9F56 /* ResourceCollector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96253BC7215642A9005D9F56 /* ResourceCollector.swift */; };
 		9691D1E521477DE600C16349 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9691D1E421477DE600C16349 /* AppDelegate.swift */; };
 		9691D1E721477DE600C16349 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9691D1E621477DE600C16349 /* MainViewController.swift */; };
 		9691D1EA21477DE600C16349 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9691D1E821477DE600C16349 /* Main.storyboard */; };
@@ -54,6 +55,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		96253BC7215642A9005D9F56 /* ResourceCollector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceCollector.swift; sourceTree = "<group>"; };
 		9691D1E121477DE600C16349 /* photobackup.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = photobackup.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9691D1E421477DE600C16349 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9691D1E621477DE600C16349 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
@@ -207,6 +209,7 @@
 				9691D22F214A54F500C16349 /* AssetCollector.swift */,
 				9691D231214A554300C16349 /* Asset.swift */,
 				9691D234214A5A9700C16349 /* Resource.swift */,
+				96253BC7215642A9005D9F56 /* ResourceCollector.swift */,
 			);
 			path = assets;
 			sourceTree = "<group>";
@@ -362,6 +365,7 @@
 				9691D2172149575F00C16349 /* ChecksumCollector.swift in Sources */,
 				9691D23F214BCA5E00C16349 /* NumberConversion.swift in Sources */,
 				9691D22E214A49C600C16349 /* DateConversion.swift in Sources */,
+				96253BC8215642A9005D9F56 /* ResourceCollector.swift in Sources */,
 				9691D239214A888100C16349 /* AssetReport.swift in Sources */,
 				9691D235214A5A9700C16349 /* Resource.swift in Sources */,
 			);
