@@ -135,9 +135,9 @@ class Core {
         let handleCompletion = { (error: Error?) in
             outputStream.close()
             if let error = error {
-                NSLog("error reading resource [%@]: %@", resource.fileName?.description ?? "", error.localizedDescription)
+                NSLog("error reading resource [%@]: %@", resource.fileName, error.localizedDescription)
             } else {
-                NSLog("Finished writing resource [%@]", resource.fileName?.description ?? "")
+                NSLog("Finished writing resource [%@]", resource.fileName)
             }
             // TODO move starting next upload to task completion or, even better, just limit parallel uploads
             // task completion is risky because it doesn't always happen... (e.g. in the face of some exceptions on the server
@@ -155,9 +155,10 @@ class Core {
             }
         }
         
+        let options = PHAssetResourceRequestOptions()
         PHAssetResourceManager.default().requestData(
             for: resource.rawResource,
-            options: nil,
+            options: options,
             dataReceivedHandler: handleData,
             completionHandler: handleCompletion)
         
