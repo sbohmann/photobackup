@@ -31,7 +31,13 @@ class ResourceCollector {
             
             let collector = ChecksumCollector() { checksum in
                 if let checksum = checksum {
-                    self.resourcesForAsset.append(Resource(checksum: checksum, rawResource: resource, fileName: fileName, fileSize: clongToInt64(fileSize), creationDate: self.asset.creationDate))
+                    self.resourcesForAsset.append(Resource(
+                        checksum: checksum,
+                        rawResourceDescription: resource.description,
+                        localAssetId: resource.assetLocalIdentifier,
+                        fileName: fileName,
+                        fileSize: clongToInt64(fileSize),
+                        creationDate: self.asset.creationDate))
                 } else {
                     self.skippedResources += 1
                 }

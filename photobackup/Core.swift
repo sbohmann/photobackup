@@ -73,6 +73,27 @@ class Core {
             return
         }
         
+        var rawResourceOption: PHAssetResource? = nil
+        
+        let options = PHAssetResourceRequestOptions()
+        let rawAssets = PHAsset.fetchAssets(withLocalIdentifiers: [resource.localAssetId], options: nil)
+        rawAssets.enumerateObjects { rawAsset, count, stop in
+            PHAssetResource.assetResources(for: rawAsset).forEach { candidate in
+                if candidate.originalFilename == resource.fileName {
+                    if rawResourceOption == nil {
+                        rawResourceOption = candidate
+                    } else {
+                        NSLog("Found competing asset resources of common name %@ for asset %@", resource.fileName, resource.localAssetId)
+                    }
+                }
+            }
+        }
+        
+        guard let rawResource = rawResourceOption else {
+            NSLog("Found no asset resources of name %@ for asset %@", resource.fileName, resource.localAssetId)
+            return
+        }
+        
         if numberOfResources > 0 {
             let resourcesFinished = numberOfResources - resources.count
             statusHandler("Uploading resource \(resourcesFinished + 1) / \(numberOfResources)", Float(resourcesFinished) / Float(numberOfResources))
@@ -86,6 +107,7 @@ class Core {
         
         guard let inputStream = boundInputStream, let outputStream = boundOutputStream else {
             NSLog("%@ unable to create streams")
+            self.startNextUpload(resources: resources, numberOfResources: numberOfResources)
             return
         }
         
@@ -142,25 +164,16 @@ class Core {
             // TODO move starting next upload to task completion or, even better, just limit parallel uploads
             // task completion is risky because it doesn't always happen... (e.g. in the face of some exceptions on the server
             // continuing is really important because this is a photo backup app.
-            let rest = [Resource](resources[1...])
-            if !rest.isEmpty {
-                DispatchQueue.main.async {
-                    self.upload(resources: rest, numberOfResources: numberOfResources)
-                }
-            } else {
-                DispatchQueue.main.async {
-                    // TODO report number of errors!!!
-                    self.statusHandler("Finished uploading resources.", 1.0)
-                }
-            }
+            self.startNextUpload(resources: resources, numberOfResources: numberOfResources)
         }
         
-        let options = PHAssetResourceRequestOptions()
         PHAssetResourceManager.default().requestData(
-            for: resource.rawResource,
+            for: rawResource,
             options: options,
             dataReceivedHandler: handleData,
             completionHandler: handleCompletion)
+        
+        
         
 //        if let data = "Hallo".data(using: .utf8) {
 //            data.withUnsafeBytes { (pointer: UnsafePointer<UInt8>) -> () in
@@ -170,7 +183,7 @@ class Core {
 //        }
     }
     
-    func reportCompletion(_ data: Data?, _ response: URLResponse?, _ error: Error?) {
+    private func reportCompletion(_ data: Data?, _ response: URLResponse?, _ error: Error?) {
         DispatchQueue.main.async {
             NSLog("%d", data?.count ?? 0)
             NSLog("%@", response?.description ?? "no response")
@@ -178,6 +191,20 @@ class Core {
 //            data?.withUnsafeBytes({ (pointer: UnsafePointer<CChar>) in
 //                NSLog("%s", pointer)
 //            })
+        }
+    }
+    
+    private func startNextUpload(resources: [Resource], numberOfResources: Int) {
+        let rest = [Resource](resources[1...])
+        if !rest.isEmpty {
+            DispatchQueue.main.async {
+                self.upload(resources: rest, numberOfResources: numberOfResources)
+            }
+        } else {
+            DispatchQueue.main.async {
+                // TODO report number of errors!!!
+                self.statusHandler("Finished uploading resources.", 1.0)
+            }
         }
     }
 }

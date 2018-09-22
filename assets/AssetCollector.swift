@@ -62,7 +62,7 @@ class AssetCollector {
             group.enter()
             
             let resourceCollector = ResourceCollector(asset, resources) { result in
-                if (result.skippedResources > 0) {
+                if result.skippedResources > 0 {
                     self.assetsWithSkippedResources += 1
                 }
                 if result.resourcesForAsset.count > 0 {
