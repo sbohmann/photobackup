@@ -66,7 +66,7 @@ class AssetCollector {
                     self.assetsWithSkippedResources += 1
                 }
                 if result.resourcesForAsset.count > 0 {
-                    self.addAsset(Asset(name: asset.localIdentifier, creationDate: asset.creationDate, resources: result.resourcesForAsset, rawAsset: asset))
+                    self.addAsset(Asset(name: asset.localIdentifier, creationDate: asset.creationDate, resources: result.resourcesForAsset))
                 } else {
                     self.assetCount -= 1
                     self.reportIfFinished()
