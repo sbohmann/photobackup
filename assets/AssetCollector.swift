@@ -8,6 +8,7 @@ class AssetCollector {
     private var assets = [Asset]()
     private var initialAssetCount = 0
     private var assetCount = 0
+    private var resourceCount = 0
     private var assetsWithoutResources = 0
     private var assetsWithSkippedResources = 0
     private var rawAssets = [PHAsset]()
@@ -81,11 +82,18 @@ class AssetCollector {
     
     private func addAsset(_ asset: Asset) {
         assets.append(asset)
+        resourceCount += asset.resources.count
         reportIfFinished()
     }
     
     private func reportIfFinished() {
-        let message = "collected assets: \(assets.count)\nout of \(initialAssetCount)\nempty assets: \(assetsWithoutResources)\nassets with skipped resources: \(assetsWithSkippedResources)"
+        let message =
+            "collected assets: \(assets.count)\n" +
+            "out of \(initialAssetCount)\n" +
+            "resources: \(resourceCount)\n" +
+            "ratio: \(assets.count > 0 ? (Double(resourceCount) / Double(assets.count)).description : "-")\n" +
+            "empty assets: \(assetsWithoutResources)\n" +
+            "assets with skipped resources: \(assetsWithSkippedResources)"
         DispatchQueue.main.async {
             self.statusHandler(message, self.assetCount > 0 ? Float(self.assets.count) / Float(self.assetCount) : 0.0)
         }
