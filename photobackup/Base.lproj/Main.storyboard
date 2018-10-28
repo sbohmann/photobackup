@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -30,21 +29,31 @@
                                 <rect key="frame" x="16" y="58" width="288" height="2"/>
                             </progressView>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Press start to initiate backup" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="PLW-WT-R9g">
-                                <rect key="frame" x="16" y="68" width="288" height="480"/>
+                                <rect key="frame" x="16" y="68" width="288" height="442"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FfF-uH-TgX">
+                                <rect key="frame" x="16" y="518" width="288" height="30"/>
+                                <state key="normal" title="Button"/>
+                                <connections>
+                                    <segue destination="yGM-N4-XKy" kind="presentation" id="yxc-Us-rIu"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="lyH-er-StD" firstAttribute="top" secondItem="v34-2V-Z4E" secondAttribute="bottom" constant="8" id="2jR-YR-cBY"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="v34-2V-Z4E" secondAttribute="trailing" id="56N-NE-frx"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="PLW-WT-R9g" secondAttribute="bottom" constant="20" id="5zz-6M-hTX"/>
                             <constraint firstItem="lyH-er-StD" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="8o2-10-buh"/>
                             <constraint firstItem="PLW-WT-R9g" firstAttribute="top" secondItem="lyH-er-StD" secondAttribute="bottom" constant="8" id="Ecq-tZ-2Gd"/>
                             <constraint firstItem="v34-2V-Z4E" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="GmB-Us-hIS"/>
+                            <constraint firstItem="FfF-uH-TgX" firstAttribute="top" secondItem="PLW-WT-R9g" secondAttribute="bottom" constant="8" id="Q5h-KX-DQ6"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="FfF-uH-TgX" secondAttribute="bottom" constant="20" id="SuS-4U-UBY"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="FfF-uH-TgX" secondAttribute="trailing" constant="16" id="bd3-pg-eVY"/>
                             <constraint firstItem="lyH-er-StD" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="jo6-NM-X20"/>
+                            <constraint firstItem="FfF-uH-TgX" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="qHb-c6-brM"/>
                             <constraint firstItem="v34-2V-Z4E" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="vT8-ei-oJ9"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="PLW-WT-R9g" secondAttribute="trailing" constant="16" id="vmV-s3-cP7"/>
                             <constraint firstItem="PLW-WT-R9g" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="ytM-EP-XH4"/>
@@ -60,6 +69,67 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="50.625" y="78.16901408450704"/>
+        </scene>
+        <!--Settings View Controller-->
+        <scene sceneID="dK7-8C-4kR">
+            <objects>
+                <viewController id="yGM-N4-XKy" userLabel="Settings View Controller" customClass="SettingsViewController" customModule="photobackup" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="uhj-o3-6QS">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Ri5-bI-zNZ">
+                                <rect key="frame" x="16" y="20" width="288" height="30"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="nM2-ee-6jA" userLabel="Port Text Field">
+                                <rect key="frame" x="16" y="58" width="288" height="30"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OeD-zX-oM9">
+                                <rect key="frame" x="16" y="96" width="288" height="30"/>
+                                <state key="normal" title="Change"/>
+                                <connections>
+                                    <action selector="change:" destination="yGM-N4-XKy" eventType="primaryActionTriggered" id="Y9Z-JA-W2G"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="so2-n4-8GM">
+                                <rect key="frame" x="16" y="134" width="288" height="30"/>
+                                <state key="normal" title="Cancel"/>
+                                <connections>
+                                    <action selector="cancel:" destination="yGM-N4-XKy" eventType="primaryActionTriggered" id="ylf-Wn-kIj"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="OeD-zX-oM9" firstAttribute="leading" secondItem="bCM-iK-gOP" secondAttribute="leading" constant="16" id="Ati-Jh-WSe"/>
+                            <constraint firstItem="nM2-ee-6jA" firstAttribute="leading" secondItem="bCM-iK-gOP" secondAttribute="leading" constant="16" id="J9c-1d-BlH"/>
+                            <constraint firstItem="OeD-zX-oM9" firstAttribute="top" secondItem="nM2-ee-6jA" secondAttribute="bottom" constant="8" id="Lmh-5K-Nha"/>
+                            <constraint firstItem="bCM-iK-gOP" firstAttribute="trailing" secondItem="so2-n4-8GM" secondAttribute="trailing" constant="16" id="OcG-Gw-4uP"/>
+                            <constraint firstItem="so2-n4-8GM" firstAttribute="top" secondItem="OeD-zX-oM9" secondAttribute="bottom" constant="8" id="RsB-AP-8oj"/>
+                            <constraint firstItem="Ri5-bI-zNZ" firstAttribute="top" secondItem="bCM-iK-gOP" secondAttribute="top" id="eMG-Zk-RbR"/>
+                            <constraint firstItem="bCM-iK-gOP" firstAttribute="trailing" secondItem="OeD-zX-oM9" secondAttribute="trailing" constant="16" id="fmV-q0-2xX"/>
+                            <constraint firstItem="Ri5-bI-zNZ" firstAttribute="leading" secondItem="bCM-iK-gOP" secondAttribute="leading" constant="16" id="jrK-70-KYb"/>
+                            <constraint firstItem="bCM-iK-gOP" firstAttribute="trailing" secondItem="nM2-ee-6jA" secondAttribute="trailing" constant="16" id="kXC-GH-NKQ"/>
+                            <constraint firstItem="bCM-iK-gOP" firstAttribute="trailing" secondItem="Ri5-bI-zNZ" secondAttribute="trailing" constant="16" id="qSv-Nv-zuG"/>
+                            <constraint firstItem="so2-n4-8GM" firstAttribute="leading" secondItem="bCM-iK-gOP" secondAttribute="leading" constant="16" id="rAY-fs-YCj"/>
+                            <constraint firstItem="nM2-ee-6jA" firstAttribute="top" secondItem="Ri5-bI-zNZ" secondAttribute="bottom" constant="8" id="zuy-9O-5OE"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="bCM-iK-gOP"/>
+                    </view>
+                    <connections>
+                        <outlet property="hostTextField" destination="Ri5-bI-zNZ" id="7au-08-Fxq"/>
+                        <outlet property="portTextField" destination="nM2-ee-6jA" id="DA8-tZ-SYb"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="jIT-18-oBe" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="886.875" y="77.112676056338032"/>
         </scene>
     </scenes>
 </document>

@@ -3,12 +3,11 @@ import Foundation
 import Photos
 
 class Core {
+    let settings: Settings
     let statusHandler: (String, Float?) -> ()
     
-    let host = "10.0.0.48"
-    let port = 8080
-    
-    init(statusHandler: @escaping (String, Float?) -> ()) {
+    init(settings: Settings, statusHandler: @escaping (String, Float?) -> ()) {
+        self.settings = settings
         self.statusHandler = statusHandler
     }
     
@@ -26,7 +25,7 @@ class Core {
     
     func sendReport(assets: [Asset], resultHandler: @escaping (MissingAssets) -> ()) {
         NSLog("on main thread before: %@", Thread.isMainThread ? "true" : "false")
-        let url = URL(string: "http://\(host):\(port)/asset-report")!
+        let url = URL(string: "http://\(settings.host):\(settings.port)/asset-report")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-type")
@@ -99,7 +98,7 @@ class Core {
             statusHandler("Uploading resource \(resourcesFinished + 1) / \(numberOfResources)", Float(resourcesFinished) / Float(numberOfResources))
         }
         
-        let url = URL(string: "http://\(host):\(port)/resource-upload/" + blockToString(resource.checksum))!
+        let url = URL(string: "http://\(settings.host):\(settings.port)/resource-upload/" + blockToString(resource.checksum))!
         
         var boundInputStream: InputStream?
         var boundOutputStream: OutputStream?

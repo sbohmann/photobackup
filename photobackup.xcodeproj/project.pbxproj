@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		96253BC8215642A9005D9F56 /* ResourceCollector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96253BC7215642A9005D9F56 /* ResourceCollector.swift */; };
+		963DB8122185CB87005A6CC1 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 963DB8112185CB87005A6CC1 /* SettingsViewController.swift */; };
+		963DB8142185CFDA005A6CC1 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 963DB8132185CFDA005A6CC1 /* Settings.swift */; };
 		9691D1E521477DE600C16349 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9691D1E421477DE600C16349 /* AppDelegate.swift */; };
 		9691D1E721477DE600C16349 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9691D1E621477DE600C16349 /* MainViewController.swift */; };
 		9691D1EA21477DE600C16349 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9691D1E821477DE600C16349 /* Main.storyboard */; };
@@ -56,6 +58,8 @@
 
 /* Begin PBXFileReference section */
 		96253BC7215642A9005D9F56 /* ResourceCollector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceCollector.swift; sourceTree = "<group>"; };
+		963DB8112185CB87005A6CC1 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		963DB8132185CFDA005A6CC1 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		9691D1E121477DE600C16349 /* photobackup.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = photobackup.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9691D1E421477DE600C16349 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9691D1E621477DE600C16349 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
@@ -145,12 +149,14 @@
 			children = (
 				9691D1E421477DE600C16349 /* AppDelegate.swift */,
 				9691D1E621477DE600C16349 /* MainViewController.swift */,
+				963DB8112185CB87005A6CC1 /* SettingsViewController.swift */,
 				9691D1E821477DE600C16349 /* Main.storyboard */,
 				9691D1EB21477DE600C16349 /* Assets.xcassets */,
 				9691D1ED21477DE600C16349 /* LaunchScreen.storyboard */,
 				9691D1F021477DE600C16349 /* Info.plist */,
 				9691D212214797D200C16349 /* Core.swift */,
 				9691D21821495A2000C16349 /* BridgingHeader.h */,
+				963DB8132185CFDA005A6CC1 /* Settings.swift */,
 			);
 			path = photobackup;
 			sourceTree = "<group>";
@@ -354,6 +360,7 @@
 				9691D221214A19C000C16349 /* ResourcePresent.swift in Sources */,
 				9691D230214A54F500C16349 /* AssetCollector.swift in Sources */,
 				9691D1E521477DE600C16349 /* AppDelegate.swift in Sources */,
+				963DB8142185CFDA005A6CC1 /* Settings.swift in Sources */,
 				9691D213214797D200C16349 /* Core.swift in Sources */,
 				9691D22A214A397300C16349 /* CheckSize.swift in Sources */,
 				9691D223214A19C000C16349 /* Checksum.swift in Sources */,
@@ -368,6 +375,7 @@
 				96253BC8215642A9005D9F56 /* ResourceCollector.swift in Sources */,
 				9691D239214A888100C16349 /* AssetReport.swift in Sources */,
 				9691D235214A5A9700C16349 /* Resource.swift in Sources */,
+				963DB8122185CB87005A6CC1 /* SettingsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

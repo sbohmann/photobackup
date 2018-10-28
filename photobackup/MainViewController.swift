@@ -8,10 +8,14 @@ class MainViewController: UIViewController {
     @IBOutlet weak var progressbar: UIProgressView!
     var core: Core!
     
+    let settings = SettingsSingletonFactory.instance
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        core = Core(statusHandler: { status, progress in
-            self.reportStatus(status, progress)
+        core = Core(
+            settings: settings,
+            statusHandler: { status, progress in
+                self.reportStatus(status, progress)
         })
     }
 
