@@ -8,7 +8,7 @@ class MainViewController: UIViewController {
     @IBOutlet weak var progressbar: UIProgressView!
     var core: Core!
     
-    let settings = SettingsSingletonFactory.instance
+    let settings: Settings = StoredSettings.instance
     
     override func viewDidLoad() {
         super.viewDidLoad()

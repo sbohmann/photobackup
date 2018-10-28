@@ -5,7 +5,7 @@ class SettingsViewController: UIViewController {
     @IBOutlet weak var hostTextField: UITextField!
     @IBOutlet weak var portTextField: UITextField!
     
-    let settings = SettingsSingletonFactory.instance
+    let settings = StoredSettings.instance
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,6 +33,7 @@ class SettingsViewController: UIViewController {
         if let port = Int(portAsText) {
             settings.host = host
             settings.port = port
+            settings.save?()
         }
     }
     

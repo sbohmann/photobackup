@@ -36,7 +36,7 @@
                             </textView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FfF-uH-TgX">
                                 <rect key="frame" x="16" y="518" width="288" height="30"/>
-                                <state key="normal" title="Button"/>
+                                <state key="normal" title="Settings"/>
                                 <connections>
                                     <segue destination="yGM-N4-XKy" kind="presentation" id="yxc-Us-rIu"/>
                                 </connections>
@@ -92,7 +92,7 @@
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OeD-zX-oM9">
                                 <rect key="frame" x="16" y="96" width="288" height="30"/>
-                                <state key="normal" title="Change"/>
+                                <state key="normal" title="Save"/>
                                 <connections>
                                     <action selector="change:" destination="yGM-N4-XKy" eventType="primaryActionTriggered" id="Y9Z-JA-W2G"/>
                                 </connections>
