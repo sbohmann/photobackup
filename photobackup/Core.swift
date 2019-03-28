@@ -121,6 +121,7 @@ class Core {
         //let task = URLSession.shared.uploadTask(withStreamedRequest: request)
         let task = URLSession.shared.dataTask(with: request, completionHandler: { data, response, error in
             self.reportCompletion(data, response, error)
+            self.startNextUpload(resources: resources, numberOfResources: numberOfResources)
         })
         if let size = resource.fileSize {
             NSLog("size: %d", size)
@@ -128,13 +129,8 @@ class Core {
         task.resume()
         outputStream.open()
         
-        var error = false
-        
         let handleData = { (data: Data) in
             var part = data
-            if error {
-                return
-            }
             while part.count > 0 {
                 let result = part.withUnsafeBytes({ bytes in outputStream.write(bytes, maxLength: part.count)})
                 NSLog("write result: %d", result)
@@ -142,7 +138,6 @@ class Core {
                     NSLog("error writing to stream: %@", outputStream.streamError?.localizedDescription ?? "<unknown>")
                     outputStream.close()
                     // TODO report error
-                    error = true
                     break
                 }
                 NSLog("%d bytes written", result)
@@ -160,10 +155,6 @@ class Core {
             } else {
                 NSLog("Finished writing resource [%@]", resource.fileName)
             }
-            // TODO move starting next upload to task completion or, even better, just limit parallel uploads
-            // task completion is risky because it doesn't always happen... (e.g. in the face of some exceptions on the server
-            // continuing is really important because this is a photo backup app.
-            self.startNextUpload(resources: resources, numberOfResources: numberOfResources)
         }
         
         PHAssetResourceManager.default().requestData(
@@ -171,15 +162,6 @@ class Core {
             options: options,
             dataReceivedHandler: handleData,
             completionHandler: handleCompletion)
-        
-        
-        
-//        if let data = "Hallo".data(using: .utf8) {
-//            data.withUnsafeBytes { (pointer: UnsafePointer<UInt8>) -> () in
-//                outputStream.write(pointer, maxLength: data.count)
-//                outputStream.close()
-//            }
-//        }
     }
     
     private func reportCompletion(_ data: Data?, _ response: URLResponse?, _ error: Error?) {
