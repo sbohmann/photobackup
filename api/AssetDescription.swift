@@ -5,11 +5,12 @@ struct AssetDescription : CustomStringConvertible, Codable {
     
     let name: String
     let creationDateMs: Int64?
+    let modificationDateMs: Int64?
     let resourceDescriptions: [ResourceDescription]
     
     var description: String {
         get {
-            return "ImageDescription{name='\(name)',createDateMs=\(creationDateMs?.description ?? "undefined"), resourceDescriptions=\(resourceDescriptions)}"
+            return "ImageDescription{name='\(name)', creationDateMs=\(creationDateMs?.description ?? "undefined"), modificationDateMs=\(modificationDateMs?.description ?? "undefined"), resourceDescriptions=\(resourceDescriptions)}"
         }
     }
 }

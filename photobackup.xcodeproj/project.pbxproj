@@ -10,6 +10,8 @@
 		96253BC8215642A9005D9F56 /* ResourceCollector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96253BC7215642A9005D9F56 /* ResourceCollector.swift */; };
 		963DB8122185CB87005A6CC1 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 963DB8112185CB87005A6CC1 /* SettingsViewController.swift */; };
 		963DB8142185CFDA005A6CC1 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 963DB8132185CFDA005A6CC1 /* Settings.swift */; };
+		965199A7225B3D9C0017AF5F /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 965199A6225B3D9C0017AF5F /* Persistence.swift */; };
+		968F35FB22561E1E001A8BFE /* PhotoBackup.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 968F35F922561E1E001A8BFE /* PhotoBackup.xcdatamodeld */; };
 		9691D1E521477DE600C16349 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9691D1E421477DE600C16349 /* AppDelegate.swift */; };
 		9691D1E721477DE600C16349 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9691D1E621477DE600C16349 /* MainViewController.swift */; };
 		9691D1EA21477DE600C16349 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9691D1E821477DE600C16349 /* Main.storyboard */; };
@@ -60,6 +62,8 @@
 		96253BC7215642A9005D9F56 /* ResourceCollector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceCollector.swift; sourceTree = "<group>"; };
 		963DB8112185CB87005A6CC1 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		963DB8132185CFDA005A6CC1 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		965199A6225B3D9C0017AF5F /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
+		968F35FA22561E1E001A8BFE /* photo_backup.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = photo_backup.xcdatamodel; sourceTree = "<group>"; };
 		9691D1E121477DE600C16349 /* photobackup.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = photobackup.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9691D1E421477DE600C16349 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9691D1E621477DE600C16349 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
@@ -124,6 +128,7 @@
 		9691D1D821477DE600C16349 = {
 			isa = PBXGroup;
 			children = (
+				968F35F922561E1E001A8BFE /* PhotoBackup.xcdatamodeld */,
 				9691D233214A554C00C16349 /* assets */,
 				9691D226214A387100C16349 /* basics */,
 				9691D219214A186B00C16349 /* api */,
@@ -157,6 +162,7 @@
 				9691D212214797D200C16349 /* Core.swift */,
 				9691D21821495A2000C16349 /* BridgingHeader.h */,
 				963DB8132185CFDA005A6CC1 /* Settings.swift */,
+				965199A6225B3D9C0017AF5F /* Persistence.swift */,
 			);
 			path = photobackup;
 			sourceTree = "<group>";
@@ -351,6 +357,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				968F35FB22561E1E001A8BFE /* PhotoBackup.xcdatamodeld in Sources */,
 				9691D237214A740D00C16349 /* PhotoKitEnums.swift in Sources */,
 				9691D222214A19C000C16349 /* AssetDescription.swift in Sources */,
 				9691D241214BE67600C16349 /* Hashing.swift in Sources */,
@@ -359,6 +366,7 @@
 				9691D1E721477DE600C16349 /* MainViewController.swift in Sources */,
 				9691D221214A19C000C16349 /* ResourcePresent.swift in Sources */,
 				9691D230214A54F500C16349 /* AssetCollector.swift in Sources */,
+				965199A7225B3D9C0017AF5F /* Persistence.swift in Sources */,
 				9691D1E521477DE600C16349 /* AppDelegate.swift in Sources */,
 				963DB8142185CFDA005A6CC1 /* Settings.swift in Sources */,
 				9691D213214797D200C16349 /* Core.swift in Sources */,
@@ -700,6 +708,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		968F35F922561E1E001A8BFE /* PhotoBackup.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				968F35FA22561E1E001A8BFE /* photo_backup.xcdatamodel */,
+			);
+			currentVersion = 968F35FA22561E1E001A8BFE /* photo_backup.xcdatamodel */;
+			path = PhotoBackup.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 9691D1D921477DE600C16349 /* Project object */;
 }

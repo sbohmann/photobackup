@@ -5,22 +5,27 @@ import Photos
 class Core {
     let settings: Settings
     let statusHandler: (String, Float?) -> ()
+    let persistence = Persistence()
     
     init(settings: Settings, statusHandler: @escaping (String, Float?) -> ()) {
         self.settings = settings
         self.statusHandler = statusHandler
     }
     
+    
     func listAssets(resultHandler: @escaping ([Asset], MissingAssets) -> ()) {
         AssetCollector.run(
             resultHandler: { assets in
-                NSLog("rporting %d assets", assets.count )
+                NSLog("reporting %d assets", assets.count )
+                
+                self.persistence.saveContext()
 
                 self.sendReport(assets: assets) { missingAssets in
                     resultHandler(assets, missingAssets)
                 }
             },
-            statusHandler: statusHandler)
+            statusHandler: statusHandler,
+            persistence: persistence)
     }
     
     func sendReport(assets: [Asset], resultHandler: @escaping (MissingAssets) -> ()) {
@@ -41,6 +46,7 @@ class Core {
                 return AssetDescription(
                     name: asset.name,
                     creationDateMs: dateToMillisecondTimestamp(asset.creationDate),
+                    modificationDateMs: dateToMillisecondTimestamp(asset.modificationDate),
                     resourceDescriptions: resourceDescriptions)
             }
             let data = try JSONEncoder().encode(AssetReport(descriptions: descriptions))
@@ -113,6 +119,7 @@ class Core {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/octet-stream", forHTTPHeaderField: "Content-type")
+        request.setValue("close", forHTTPHeaderField: "Connection")
         request.httpBodyStream = inputStream
         
 //        let task = URLSession.shared.uploadTask(with: request, from: nil, completionHandler: { data, response, error in
@@ -120,6 +127,7 @@ class Core {
 //        })
         //let task = URLSession.shared.uploadTask(withStreamedRequest: request)
         let task = URLSession.shared.dataTask(with: request, completionHandler: { data, response, error in
+            NSLog("dataTask completed - data length: \(data?.count.description ?? "unknown")")
             self.reportCompletion(data, response, error)
             self.startNextUpload(resources: resources, numberOfResources: numberOfResources)
         })
@@ -153,7 +161,7 @@ class Core {
             if let error = error {
                 NSLog("error reading resource [%@]: %@", resource.fileName, error.localizedDescription)
             } else {
-                NSLog("Finished writing resource [%@]", resource.fileName)
+                NSLog("Finished writing resource [%@], checksum: %@", resource.fileName, blockToString(resource.checksum))
             }
         }
         

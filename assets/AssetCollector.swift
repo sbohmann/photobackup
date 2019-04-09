@@ -1,8 +1,12 @@
 
 import Foundation
 import Photos
+import CoreData
 
 class AssetCollector {
+    private let persistence: Persistence
+    private var knownAssets: KnownAsset!
+    
     private let resultHandler: ([Asset]) -> ()
     private var statusHandler: (String, Float?) -> ()
     private var assets = [Asset]()
@@ -15,15 +19,22 @@ class AssetCollector {
     
     private let group = DispatchGroup()
     
-    static func run(resultHandler: @escaping ([Asset]) -> (), statusHandler: @escaping (String, Float?) -> ()) {
-        PHPhotoLibrary.requestAuthorization { status in
-            AssetCollector(resultHandler, statusHandler).runIfAuthorized(status: status)
-        }
-    }
-    
-    private init(_ resultHandler: @escaping ([Asset]) -> (), _ statusHandler: @escaping (String, Float?) -> ()) {
+    private init(_ resultHandler: @escaping ([Asset]) -> (),
+                 _ statusHandler: @escaping (String, Float?) -> (),
+                 _ persistence: Persistence) {
         self.resultHandler = resultHandler
         self.statusHandler = statusHandler
+        self.persistence = persistence
+        self.knownAssets = KnownAsset(context: persistence.persistentContainer.viewContext)
+    }
+    
+    static func run(resultHandler: @escaping ([Asset]) -> (),
+                    statusHandler: @escaping (String, Float?) -> (),
+                    persistence: Persistence) {
+        PHPhotoLibrary.requestAuthorization { status in
+            AssetCollector(resultHandler, statusHandler, persistence)
+                .runIfAuthorized(status: status)
+        }
     }
     
     private func runIfAuthorized(status: PHAuthorizationStatus) {
@@ -47,14 +58,64 @@ class AssetCollector {
             NSLog("count: %d", fetchResult.count)
             self.assetCount += fetchResult.count
             self.initialAssetCount = self.assetCount
-            fetchResult.enumerateObjects { (asset, count, boolPointer) in
-                self.handleRawAsset(asset)
+            
+            let request: NSFetchRequest<KnownAsset> = KnownAsset.fetchRequest()
+            
+            var knownAssetsForName = Dictionary<String,[Asset]>()
+            do {
+                let knownAssets = try self.persistence.persistentContainer.viewContext.fetch(request)
+                
+//                for knownAsset in knownAssets {
+//                    self.persistence.persistentContainer.viewContext.delete(knownAsset)
+//                }
+//                self.persistence.saveContext()
+//                NSLog("Deleted all data")
+//                return
+                
+                for knownAsset in knownAssets {
+                    if let name = knownAsset.name, let serializedAsset = knownAsset.asset {
+                        let asset = try JSONDecoder().decode(Asset.self, from: serializedAsset)
+                        if asset.name != name {
+                            NSLog("name mismatch - \(name) vs. \(asset.name)")
+                        }
+                        var assetsForName = knownAssetsForName[name] ?? []
+                        assetsForName.append(asset)
+                        knownAssetsForName[name] = assetsForName
+                    }
+                }
+            } catch {
+                NSLog("Failed to fetch assets from core data - \(error)")
             }
+            
+            var timeHandlingRawAssets: Int64 = 0
+            let beforeEnumeration = DispatchTime.now()
+            fetchResult.enumerateObjects { (asset, count, boolPointer) in
+                let beforeHandleRawAsset = DispatchTime.now()
+                self.handleRawAsset(asset, knownAssetsForName)
+                let afterHandleRawAsset = DispatchTime.now()
+                let delta = afterHandleRawAsset.uptimeNanoseconds - beforeHandleRawAsset.uptimeNanoseconds
+                timeHandlingRawAssets += Int64(delta)
+            }
+            let afterEnumeration = DispatchTime.now()
+            let timeEnumerating = afterEnumeration.uptimeNanoseconds - beforeEnumeration.uptimeNanoseconds
+            NSLog("time handling raw assets: %f", Double(timeHandlingRawAssets) / 1_000_000_000.0)
+            NSLog("time enumerating:         %f", Double(timeEnumerating) / 1_000_000_000.0)
         }
     }
     
-    private func handleRawAsset(_ asset: PHAsset) {
+    private func handleRawAsset(_ asset: PHAsset, _ knownAssetsForName: Dictionary<String,[Asset]>) {
+        if let modificationDate = asset.modificationDate ?? asset.creationDate {
+            if let assetsForName = knownAssetsForName[asset.localIdentifier] {
+                for knownAsset in assetsForName {
+                    // TODO check modification date, duplicates, &c.
+                    self.addAsset(knownAsset)
+                    return
+                }
+            }
+        }
+        
         let resources = PHAssetResource.assetResources(for: asset)
+        
         if (resources.isEmpty) {
             assetCount -= 1
             assetsWithoutResources += 1
@@ -67,7 +128,28 @@ class AssetCollector {
                     self.assetsWithSkippedResources += 1
                 }
                 if result.resourcesForAsset.count > 0 {
-                    self.addAsset(Asset(name: asset.localIdentifier, creationDate: asset.creationDate, resources: result.resourcesForAsset))
+                    let newAsset = Asset(
+                        name: asset.localIdentifier,
+                        creationDate: asset.creationDate,
+                        modificationDate: asset.modificationDate ?? asset.creationDate,
+                        resources: result.resourcesForAsset)
+                    
+                    self.addAsset(newAsset)
+                    
+                    if let modificationDate = asset.modificationDate ?? asset.creationDate {
+                        do {
+                            let serializedAsset = try JSONEncoder().encode(newAsset)
+                            let newKnownAsset = KnownAsset(context: self.persistence.persistentContainer.viewContext)
+                            newKnownAsset.name = asset.localIdentifier
+                            newKnownAsset.modificationDate = modificationDate.timeIntervalSince1970
+                            newKnownAsset.asset = serializedAsset
+                            if newKnownAsset.name != newAsset.name || newKnownAsset.name != asset.localIdentifier {
+                                NSLog("Name mismatch - \(newKnownAsset.name ?? "none"), \(newAsset.name), \(asset.localIdentifier)")
+                            }
+                        } catch {
+                            NSLog("Failed to save asset of name \(asset.localIdentifier) and modification date \(modificationDate) from core data - \(error)")
+                        }
+                    }
                 } else {
                     self.assetCount -= 1
                     self.reportIfFinished()

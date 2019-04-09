@@ -2,7 +2,7 @@
 import Foundation
 import Photos
 
-struct Resource : CustomStringConvertible {
+struct Resource : CustomStringConvertible, Codable {
     let checksum: [UInt8]
     let rawResourceDescription: String
     let localAssetId: String
