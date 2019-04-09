@@ -107,9 +107,12 @@ class AssetCollector {
         if let modificationDate = asset.modificationDate ?? asset.creationDate {
             if let assetsForName = knownAssetsForName[asset.localIdentifier] {
                 for knownAsset in assetsForName {
-                    // TODO check modification date, duplicates, &c.
-                    self.addAsset(knownAsset)
-                    return
+                    if knownAsset.modificationDate == modificationDate {
+                        self.addAsset(knownAsset)
+                        return
+                    } else {
+                        NSLog("Ignoring known asset with modification date \(knownAsset.modificationDate?.description ?? "none"), current modification date: \(modificationDate)")
+                    }
                 }
             }
         }
