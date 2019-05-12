@@ -10,7 +10,6 @@
 		96253BC8215642A9005D9F56 /* ResourceCollector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96253BC7215642A9005D9F56 /* ResourceCollector.swift */; };
 		963DB8122185CB87005A6CC1 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 963DB8112185CB87005A6CC1 /* SettingsViewController.swift */; };
 		963DB8142185CFDA005A6CC1 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 963DB8132185CFDA005A6CC1 /* Settings.swift */; };
-		964EF10A22881C3B00BEAABB /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 964EF10922881C3A00BEAABB /* icon.png */; };
 		965199A7225B3D9C0017AF5F /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 965199A6225B3D9C0017AF5F /* Persistence.swift */; };
 		968F35FB22561E1E001A8BFE /* PhotoBackup.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 968F35F922561E1E001A8BFE /* PhotoBackup.xcdatamodeld */; };
 		9691D1E521477DE600C16349 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9691D1E421477DE600C16349 /* AppDelegate.swift */; };
@@ -63,7 +62,6 @@
 		96253BC7215642A9005D9F56 /* ResourceCollector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceCollector.swift; sourceTree = "<group>"; };
 		963DB8112185CB87005A6CC1 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		963DB8132185CFDA005A6CC1 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
-		964EF10922881C3A00BEAABB /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		965199A6225B3D9C0017AF5F /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		968F35FA22561E1E001A8BFE /* photo_backup.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = photo_backup.xcdatamodel; sourceTree = "<group>"; };
 		9691D1E121477DE600C16349 /* photobackup.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = photobackup.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -154,7 +152,6 @@
 		9691D1E321477DE600C16349 /* photobackup */ = {
 			isa = PBXGroup;
 			children = (
-				964EF10922881C3A00BEAABB /* icon.png */,
 				9691D1E421477DE600C16349 /* AppDelegate.swift */,
 				9691D1E621477DE600C16349 /* MainViewController.swift */,
 				963DB8112185CB87005A6CC1 /* SettingsViewController.swift */,
@@ -333,7 +330,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				964EF10A22881C3B00BEAABB /* icon.png in Resources */,
 				9691D1EF21477DE600C16349 /* LaunchScreen.storyboard in Resources */,
 				9691D1EC21477DE600C16349 /* Assets.xcassets in Resources */,
 				9691D1EA21477DE600C16349 /* Main.storyboard in Resources */,
