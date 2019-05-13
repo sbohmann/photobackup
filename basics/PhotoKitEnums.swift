@@ -17,14 +17,14 @@ func sourceTypeToString(_ type: PHAssetSourceType) -> String {
 
 func mediaTypeToString(_ type: PHAssetMediaType) -> String {
     switch type {
-    case .unknown:
-        return "unknown"
     case .image:
         return "image"
     case .video:
         return "video"
     case .audio:
         return "audio"
+    default:
+        return "unknown"
     }
 }
 

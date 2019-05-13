@@ -2,16 +2,7 @@
 private let Length = 64
 
 struct Checksum : CustomStringConvertible, Codable, Hashable {
-    var hashValue: Int {
-        get {
-            var result = 0
-            for byte in value {
-                result = result &+ Int(byte)
-                result = result &* ReasonablePrime
-            }
-            return result
-        }
-    }
+    
     
     let value: [UInt8]
 
@@ -40,5 +31,14 @@ struct Checksum : CustomStringConvertible, Codable, Hashable {
         get {
             return "Checksum{value=\(blockToString(value))}"
         }
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        var result = 0
+        for byte in value {
+            result = result &+ Int(byte)
+            result = result &* ReasonablePrime
+        }
+        hasher.combine(result)
     }
 }

@@ -140,7 +140,7 @@ class Core {
         let handleData = { (data: Data) in
             var part = data
             while part.count > 0 {
-                let result = part.withUnsafeBytes({ bytes in outputStream.write(bytes, maxLength: part.count)})
+                let result = part.withUnsafeBytes { bytes in outputStream.write(bytes.load(as: UnsafePointer<UInt8>.self), maxLength: part.count)}
                 NSLog("write result: %d", result)
                 if (result < 0) {
                     NSLog("error writing to stream: %@", outputStream.streamError?.localizedDescription ?? "<unknown>")
