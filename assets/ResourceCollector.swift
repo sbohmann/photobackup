@@ -25,9 +25,7 @@ class ResourceCollector {
             
             let fileName = resource.originalFilename
             
-            let fileSize = resource.responds(to: Selector("fileSize"))
-                ? resource.value(forKey: "fileSize") as? CLong
-                : nil
+            let fileSize = resource.value(forKey: "fileSize") as? CLong
             
             let collector = ChecksumCollector() { checksum in
                 if let checksum = checksum {
