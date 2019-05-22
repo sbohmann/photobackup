@@ -64,6 +64,7 @@
 		963DB8132185CFDA005A6CC1 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		963DC8E622884BD9006D8821 /* privacy.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = privacy.md; sourceTree = "<group>"; };
 		965199A6225B3D9C0017AF5F /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
+		9685D67C228946EB00F637A9 /* versions-and-testing.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "versions-and-testing.md"; sourceTree = "<group>"; };
 		968F35FA22561E1E001A8BFE /* photo_backup.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = photo_backup.xcdatamodel; sourceTree = "<group>"; };
 		9691D1E121477DE600C16349 /* photobackup.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = photobackup.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9691D1E421477DE600C16349 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -126,6 +127,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9685D67B228946C400F637A9 /* Versions and Testing */ = {
+			isa = PBXGroup;
+			children = (
+				9685D67C228946EB00F637A9 /* versions-and-testing.md */,
+			);
+			path = "Versions and Testing";
+			sourceTree = "<group>";
+		};
 		9691D1D821477DE600C16349 = {
 			isa = PBXGroup;
 			children = (
@@ -138,6 +147,7 @@
 				9691D1F821477DE600C16349 /* photobackupTests */,
 				9691D20321477DE600C16349 /* photobackupUITests */,
 				9691D1E221477DE600C16349 /* Products */,
+				9685D67B228946C400F637A9 /* Versions and Testing */,
 			);
 			sourceTree = "<group>";
 		};

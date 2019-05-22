@@ -30,7 +30,7 @@ class Core {
     
     func sendReport(assets: [Asset], resultHandler: @escaping (MissingAssets) -> ()) {
         NSLog("on main thread before: %@", Thread.isMainThread ? "true" : "false")
-        let url = URL(string: "http://\(settings.host):\(settings.port)/asset-report")!
+        let url = URL(string: settings.protocolName + "://\(settings.host):\(settings.port)/asset-report")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-type")
@@ -60,16 +60,14 @@ class Core {
                         DispatchQueue.main.async {
                             resultHandler(result)
                         }
-                    } else {
-                        NSLog("Failed to decode data")
                     }
                 } catch {
-                    NSLog("%@", error.localizedDescription)
+                    NSLog("Failed to decode data: %@", error.localizedDescription)
                 }
             }
             task.resume()
         } catch {
-            NSLog("error: %@", error.localizedDescription)
+            NSLog("Failed to encode data: %@", error.localizedDescription)
         }
     }
     
@@ -104,7 +102,7 @@ class Core {
             statusHandler("Uploading resource \(resourcesFinished + 1) / \(numberOfResources)", Float(resourcesFinished) / Float(numberOfResources))
         }
         
-        let url = URL(string: "http://\(settings.host):\(settings.port)/resource-upload/" + blockToString(resource.checksum))!
+        let url = URL(string: settings.protocolName + "://\(settings.host):\(settings.port)/resource-upload/" + blockToString(resource.checksum))!
         
         var boundInputStream: InputStream?
         var boundOutputStream: OutputStream?
@@ -174,9 +172,9 @@ class Core {
     
     private func reportCompletion(_ data: Data?, _ response: URLResponse?, _ error: Error?) {
         DispatchQueue.main.async {
-            NSLog("%d", data?.count ?? 0)
-            NSLog("%@", response?.description ?? "no response")
-            NSLog("%@", error?.localizedDescription ?? "no error")
+            NSLog("data length: %d", data?.count ?? 0)
+            NSLog("response: %@", response?.description ?? "no response")
+            NSLog("error: %@", error?.localizedDescription ?? "no error")
 //            data?.withUnsafeBytes({ (pointer: UnsafePointer<CChar>) in
 //                NSLog("%s", pointer)
 //            })
