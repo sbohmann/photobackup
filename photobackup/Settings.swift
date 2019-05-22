@@ -58,7 +58,7 @@ class StoredSettings {
     }
     
     private static func save(_ settings: Settings) {
-        result.update()
+        //result.update()
         let def = UserDefaults.standard
         def.set(settings.host, forKey: HostKey)
         def.set(settings.port, forKey: PortKey)
