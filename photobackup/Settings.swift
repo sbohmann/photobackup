@@ -6,7 +6,6 @@ class Settings {
     var port = 8080
     var tls = false
     var password: String?
-    var credentialStorage: URLCredentialStorage?
     
     var protocolName: String {
         get {
@@ -15,20 +14,6 @@ class Settings {
     }
     
     var save: (() -> ())?
-    
-    func update() {
-        if tls, let password = password {
-            setCredentialStorage()
-        } else {
-            credentialStorage = nil
-        }
-    }
-    
-    private func setCredentialStorage() {
-        let credential = URLCredential(user: "photobackup", password: "b:", persistence: URLCredential.Persistence.forSession)
-        let protectionSpace = URLProtectionSpace(host: host, port: port, protocol: "https", realm: nil, authenticationMethod: NSURLAuthenticationMethodHTTPDigest)
-        URLCredentialStorage.shared.setDefaultCredential(credential, for: protectionSpace)
-    }
 }
 
 class StoredSettings {
@@ -53,7 +38,6 @@ class StoredSettings {
         result.save = {
             save(result)
         }
-        result.update()
         return result
     }
     
