@@ -110,8 +110,6 @@ class AssetCollector {
                     if knownAsset.modificationDate == modificationDate {
                         self.addAsset(knownAsset)
                         return
-                    } else {
-                        NSLog("Ignoring known asset with modification date \(knownAsset.modificationDate?.description ?? "none"), current modification date: \(modificationDate)")
                     }
                 }
             }

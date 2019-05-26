@@ -20,6 +20,7 @@ class StoredSettings {
     private static let HostKey = "host"
     private static let PortKey = "port"
     private static let TlsKey = "tls"
+    private static let PasswordKey = "password"
     
     static let instance = load()
     
@@ -35,6 +36,10 @@ class StoredSettings {
             result.port = port
         }
         result.tls = def.bool(forKey: TlsKey)
+        let passwordOption = def.string(forKey: PasswordKey)
+        if let password = passwordOption {
+            result.password = password
+        }
         result.save = {
             save(result)
         }
@@ -47,6 +52,7 @@ class StoredSettings {
         def.set(settings.host, forKey: HostKey)
         def.set(settings.port, forKey: PortKey)
         def.set(settings.tls, forKey: TlsKey)
+        def.set(settings.password, forKey: PasswordKey)
         def.synchronize()
     }
 }

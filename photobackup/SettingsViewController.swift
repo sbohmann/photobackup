@@ -14,6 +14,7 @@ class SettingsViewController: UIViewController {
         hostTextField.text = settings.host
         portTextField.text = settings.port.description
         tlsSwitch.isOn = settings.tls
+        passwordTextField.text = settings.password
     }
     
     @IBAction func change(_ sender: Any) {

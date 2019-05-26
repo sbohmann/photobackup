@@ -6,12 +6,12 @@ class Core {
     let settings: Settings
     let statusHandler: (String, Float?) -> ()
     let persistence = Persistence()
+    var token: String? = nil
     
     init(settings: Settings, statusHandler: @escaping (String, Float?) -> ()) {
         self.settings = settings
         self.statusHandler = statusHandler
     }
-    
     
     func listAssets(resultHandler: @escaping ([Asset], MissingAssets) -> ()) {
         AssetCollector.run(
@@ -19,9 +19,11 @@ class Core {
                 NSLog("reporting %d assets", assets.count )
                 
                 self.persistence.saveContext()
-
-                self.sendReport(assets: assets) { missingAssets in
-                    resultHandler(assets, missingAssets)
+                
+                self.loginIfRequired {
+                    self.sendReport(assets: assets) { missingAssets in
+                        resultHandler(assets, missingAssets)
+                    }
                 }
             },
             statusHandler: statusHandler,
@@ -34,6 +36,7 @@ class Core {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-type")
+        insertToken(&request)
         do {
             let descriptions: [AssetDescription] = assets.map { asset in
                 let resourceDescriptions: [ResourceDescription] = asset.resources.map { resource in
@@ -117,7 +120,7 @@ class Core {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/octet-stream", forHTTPHeaderField: "Content-type")
-        request.setValue("close", forHTTPHeaderField: "Connection")
+        insertToken(&request)
         request.httpBodyStream = inputStream
         
 //        let task = URLSession.shared.uploadTask(with: request, from: nil, completionHandler: { data, response, error in
@@ -139,14 +142,14 @@ class Core {
             var part = data
             while part.count > 0 {
                 let result = part.withUnsafeBytes({ bytes in outputStream.write(bytes, maxLength: part.count)})
-                NSLog("write result: %d", result)
+//                NSLog("write result: %d", result)
                 if (result < 0) {
                     NSLog("error writing to stream: %@", outputStream.streamError?.localizedDescription ?? "<unknown>")
                     outputStream.close()
                     // TODO report error
                     break
                 }
-                NSLog("%d bytes written", result)
+//                NSLog("%d bytes written", result)
                 if (result == part.count) {
                     break
                 }
@@ -193,5 +196,36 @@ class Core {
                 self.statusHandler("Finished uploading resources.", 1.0)
             }
         }
+    }
+    
+    private func insertToken(_ request: inout URLRequest) {
+        if let token = token {
+            request.setValue(token, forHTTPHeaderField: "Authorization")
+        }
+    }
+    
+    private func loginIfRequired(_ then: @escaping (() -> ())) {
+        if settings.tls, token == nil, let password = settings.password {
+            login(password, then)
+        } else {
+            then()
+        }
+    }
+    
+    private func login(_ password: String, _ then: @escaping (() -> ())) {
+        let url = URL(string: "https://\(settings.host):\(settings.port)/login/api")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("text/plain; charset=utf-8", forHTTPHeaderField: "Content-type")
+        request.httpBody = password.data(using: .utf8)
+        
+        let task = URLSession.shared.dataTask(with: request, completionHandler: { data, response, error in
+            NSLog("login completed - data length: \(data?.count.description ?? "unknown")")
+            if let data = data {
+                self.token = String(data: data, encoding: .utf8)?.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+                then()
+            }
+        })
+        task.resume()
     }
 }
