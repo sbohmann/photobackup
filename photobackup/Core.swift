@@ -201,10 +201,8 @@ class Core {
                 self.upload(resources: rest, numberOfResources: numberOfResources)
             }
         } else {
-            DispatchQueue.main.async {
-                // TODO report number of errors!!!
-                self.statusHandler("Finished uploading resources.", 1.0)
-            }
+            // TODO report number of errors!!!
+            self.statusHandler("Finished uploading resources.", 1.0)
         }
     }
     
@@ -231,7 +229,7 @@ class Core {
         
         let task = URLSession.shared.dataTask(with: request, completionHandler: { data, response, error in
             NSLog("login completed - data length: \(data?.count.description ?? "unknown")")
-            if let data = data {
+            if let data = data, data.count > 0 {
                 self.token = String(data: data, encoding: .utf8)?.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
                 then()
             } else if let error = error {

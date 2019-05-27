@@ -15,8 +15,10 @@ class MainViewController: UIViewController {
         core = Core(
             settings: settings,
             statusHandler: { status, progress in
-                self.reportStatus(status, progress)
-        })
+                DispatchQueue.main.async {
+                    self.reportStatus(status, progress)
+                }
+            })
     }
 
     override func didReceiveMemoryWarning() {
