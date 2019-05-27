@@ -63,14 +63,20 @@ class Core {
                         DispatchQueue.main.async {
                             resultHandler(result)
                         }
+                    } else if let error = error {
+                        self.statusHandler("Error while reporting assets: \(error)", nil)
+                    } else {
+                        self.statusHandler("Error while reporting assets", nil)
                     }
                 } catch {
                     NSLog("Failed to decode data: %@", error.localizedDescription)
+                    self.statusHandler("Error while reporting assets: unable to parse response", nil)
                 }
             }
             task.resume()
         } catch {
             NSLog("Failed to encode data: %@", error.localizedDescription)
+            self.statusHandler("Error while reporting assets: unable to encode request", nil)
         }
     }
     
@@ -130,6 +136,9 @@ class Core {
         let task = URLSession.shared.dataTask(with: request, completionHandler: { data, response, error in
             NSLog("dataTask completed - data length: \(data?.count.description ?? "unknown")")
             self.reportCompletion(data, response, error)
+            if let error = error {
+                self.statusHandler("Error uploading resource \(resource.fileName): \(error)", nil)
+            }
             self.startNextUpload(resources: resources, numberOfResources: numberOfResources)
         })
         if let size = resource.fileSize {
@@ -161,6 +170,7 @@ class Core {
             outputStream.close()
             if let error = error {
                 NSLog("error reading resource [%@]: %@", resource.fileName, error.localizedDescription)
+                self.statusHandler("Error during upload: unable to read resxource \(resource.fileName)", nil)
             } else {
                 NSLog("Finished writing resource [%@], checksum: %@", resource.fileName, blockToString(resource.checksum))
             }
@@ -224,6 +234,10 @@ class Core {
             if let data = data {
                 self.token = String(data: data, encoding: .utf8)?.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
                 then()
+            } else if let error = error {
+                self.statusHandler("Login error: \(error)", nil)
+            } else {
+                self.statusHandler("Login error", nil)
             }
         })
         task.resume()
