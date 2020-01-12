@@ -5,7 +5,6 @@ import CoreData
 
 class AssetCollector {
     private let persistence: Persistence
-    private var knownAssets: KnownAsset!
     
     private let resultHandler: ([Asset]) -> ()
     private var statusHandler: (String, Float?) -> ()
@@ -15,7 +14,7 @@ class AssetCollector {
     private var resourceCount = 0
     private var assetsWithoutResources = 0
     private var assetsWithSkippedResources = 0
-    private var rawAssets = [PHAsset]()
+    private var bursts = Dictionary<String,Int>()
     
     private let group = DispatchGroup()
     
@@ -25,7 +24,6 @@ class AssetCollector {
         self.resultHandler = resultHandler
         self.statusHandler = statusHandler
         self.persistence = persistence
-        self.knownAssets = KnownAsset(context: persistence.persistentContainer.viewContext)
     }
     
     static func run(resultHandler: @escaping ([Asset]) -> (),
@@ -50,8 +48,37 @@ class AssetCollector {
         options.includeAllBurstAssets = true
         options.fetchLimit = Int.max
         options.includeHiddenAssets = true
-        let collections = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .smartAlbumUserLibrary, options: options)
+                    
+        let request: NSFetchRequest<KnownAsset> = KnownAsset.fetchRequest()
         
+        var knownAssetsForName = Dictionary<String,[Asset]>()
+        do {
+            let knownAssets = try self.persistence.persistentContainer.viewContext.fetch(request)
+            
+//                for knownAsset in knownAssets {
+//                    self.persistence.persistentContainer.viewContext.delete(knownAsset)
+//                }
+//                self.persistence.saveContext()
+//                NSLog("Deleted all data")
+//                return
+            
+            for knownAsset in knownAssets {
+                if let name = knownAsset.name, let serializedAsset = knownAsset.asset {
+                    let asset = try JSONDecoder().decode(Asset.self, from: serializedAsset)
+                    if asset.name != name {
+                        NSLog("name mismatch - \(name) vs. \(asset.name)")
+                    }
+                    var assetsForName = knownAssetsForName[name] ?? []
+                    assetsForName.append(asset)
+                    knownAssetsForName[name] = assetsForName
+                }
+            }
+        } catch {
+            NSLog("Failed to fetch assets from core data - \(error)")
+        }
+        
+        NSLog("Enumerating collections")
+        let collections = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .smartAlbumUserLibrary, options: options)
         collections.enumerateObjects { collection, count, pointer in
             NSLog("Collections name: %@, type: %d/%d", collection.description, collection.assetCollectionType.rawValue, collection.assetCollectionSubtype.rawValue)
             let fetchResult = PHAsset.fetchAssets(in: collection, options: options)
@@ -59,43 +86,18 @@ class AssetCollector {
             self.assetCount += fetchResult.count
             self.initialAssetCount = self.assetCount
             
-            let request: NSFetchRequest<KnownAsset> = KnownAsset.fetchRequest()
-            
-            var knownAssetsForName = Dictionary<String,[Asset]>()
-            do {
-                let knownAssets = try self.persistence.persistentContainer.viewContext.fetch(request)
-                
-//                for knownAsset in knownAssets {
-//                    self.persistence.persistentContainer.viewContext.delete(knownAsset)
-//                }
-//                self.persistence.saveContext()
-//                NSLog("Deleted all data")
-//                return
-                
-                for knownAsset in knownAssets {
-                    if let name = knownAsset.name, let serializedAsset = knownAsset.asset {
-                        let asset = try JSONDecoder().decode(Asset.self, from: serializedAsset)
-                        if asset.name != name {
-                            NSLog("name mismatch - \(name) vs. \(asset.name)")
-                        }
-                        var assetsForName = knownAssetsForName[name] ?? []
-                        assetsForName.append(asset)
-                        knownAssetsForName[name] = assetsForName
-                    }
-                }
-            } catch {
-                NSLog("Failed to fetch assets from core data - \(error)")
-            }
-            
+            NSLog("Enumerating assets")
             var timeHandlingRawAssets: Int64 = 0
             let beforeEnumeration = DispatchTime.now()
             fetchResult.enumerateObjects { (asset, count, boolPointer) in
                 let beforeHandleRawAsset = DispatchTime.now()
                 self.handleRawAsset(asset, knownAssetsForName)
+                self.handleBurstAssets(asset, knownAssetsForName)
                 let afterHandleRawAsset = DispatchTime.now()
                 let delta = afterHandleRawAsset.uptimeNanoseconds - beforeHandleRawAsset.uptimeNanoseconds
                 timeHandlingRawAssets += Int64(delta)
             }
+            
             let afterEnumeration = DispatchTime.now()
             let timeEnumerating = afterEnumeration.uptimeNanoseconds - beforeEnumeration.uptimeNanoseconds
             NSLog("time handling raw assets: %f", Double(timeHandlingRawAssets) / 1_000_000_000.0)
@@ -103,17 +105,54 @@ class AssetCollector {
         }
     }
     
+    private func handleBurstAssets(_ asset: PHAsset, _ knownAssetsForName: Dictionary<String,[Asset]>) {
+        if asset.representsBurst {
+            guard let burstId = asset.burstIdentifier else {
+                NSLog("Encountered asssed representing burst without burst ID. local ID: \(asset.localIdentifier)")
+                return
+            }
+            let options = PHFetchOptions()
+            options.includeAllBurstAssets = true
+            options.fetchLimit = Int.max
+            options.includeHiddenAssets = true
+            let fetchResult = PHAsset.fetchAssets(withBurstIdentifier: burstId, options: options)
+            NSLog("Enumerating burst assets for burst ID \(asset.burstIdentifier ?? "<none>"), local ID \(asset.localIdentifier)")
+            fetchResult.enumerateObjects { (burstAsset, count, boolPointer) in
+                if burstAsset.localIdentifier != asset.localIdentifier {
+                    NSLog("Handling burst asset with burst ID \(burstAsset.burstIdentifier ?? "<none>"), local ID \(burstAsset.localIdentifier)")
+                    self.handleRawAsset(burstAsset, knownAssetsForName)
+                } else {
+                    NSLog("Asset with same burst ID enumerated while fetching with burst ID")
+                }
+            }
+        }
+    }
+    
     private func handleRawAsset(_ asset: PHAsset, _ knownAssetsForName: Dictionary<String,[Asset]>) {
+        var is_burst = false
+        if let burstId = asset.burstIdentifier {
+            var number = bursts[burstId] ?? 0
+            number += 1
+            bursts[burstId] = number
+            NSLog("Encountered burst ID \(burstId), local ID \(asset.localIdentifier), number: \(number)")
+            is_burst = true
+        }
+        
         if let modificationDate = asset.modificationDate ?? asset.creationDate {
             if let assetsForName = knownAssetsForName[asset.localIdentifier] {
                 for knownAsset in assetsForName {
                     if knownAsset.modificationDate == modificationDate {
                         self.addAsset(knownAsset)
+                        if (is_burst) {
+                            NSLog("Returning")
+                        }
                         return
                     }
                 }
             }
         }
+        
+        NSLog("Processing asset \(asset.localIdentifier)")
         
         let resources = PHAssetResource.assetResources(for: asset)
         
@@ -125,6 +164,7 @@ class AssetCollector {
             group.enter()
             
             let resourceCollector = ResourceCollector(asset, resources) { result in
+                NSLog("Handling \(result.resourcesForAsset.count) resources for asset \(asset.localIdentifier)")
                 if result.skippedResources > 0 {
                     self.assetsWithSkippedResources += 1
                 }

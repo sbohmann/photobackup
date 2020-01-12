@@ -18,7 +18,7 @@ class ChecksumCollector {
     }
     
     func handleData(data: Data) {
-        _ = data.withUnsafeBytes { pointer in CC_SHA512_Update(&state, pointer, CC_LONG(data.count)) }
+        _ = data.withUnsafeBytes{ pointer in CC_SHA512_Update(&state, pointer.baseAddress, CC_LONG(data.count)) }
     }
     
     func handleCompletion(error: Error?) {

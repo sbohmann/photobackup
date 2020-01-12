@@ -14,6 +14,7 @@ class Core {
     }
     
     func listAssets(resultHandler: @escaping ([Asset], MissingAssets) -> ()) {
+        NSLog("Running asset collector")
         AssetCollector.run(
             resultHandler: { assets in
                 NSLog("reporting %d assets", assets.count )
@@ -103,6 +104,7 @@ class Core {
         
         guard let rawResource = rawResourceOption else {
             NSLog("Found no asset resources of name %@ for asset %@", resource.fileName, resource.localAssetId)
+            self.startNextUpload(resources: resources, numberOfResources: numberOfResources)
             return
         }
         
@@ -150,7 +152,7 @@ class Core {
         let handleData = { (data: Data) in
             var part = data
             while part.count > 0 {
-                let result = part.withUnsafeBytes({ bytes in outputStream.write(bytes, maxLength: part.count)})
+                let result = part.withUnsafeBytes({ bytes in outputStream.write(bytes.bindMemory(to: UInt8.self).baseAddress!, maxLength: part.count)})
 //                NSLog("write result: %d", result)
                 if (result < 0) {
                     NSLog("error writing to stream: %@", outputStream.streamError?.localizedDescription ?? "<unknown>")
