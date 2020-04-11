@@ -43,7 +43,7 @@ class MainViewController: UIViewController {
                         .resources
                         .filter({ resource in missingAssetChecksums.contains(Checksum(value: resource.checksum)) }))
             }
-            self.core.upload(resources: filteredResources, numberOfResources: filteredResources.count)
+            self.core.upload(resources: filteredResources, numberOfResources: filteredResources.count, numberOfResourcesSuccesfullyUploaded: 0)
         }
     }
     

@@ -92,7 +92,7 @@ class AssetCollector {
             fetchResult.enumerateObjects { (asset, count, boolPointer) in
                 let beforeHandleRawAsset = DispatchTime.now()
                 self.handleRawAsset(asset, knownAssetsForName)
-                self.handleBurstAssets(asset, knownAssetsForName)
+//                self.handleBurstAssets(asset, knownAssetsForName)
                 let afterHandleRawAsset = DispatchTime.now()
                 let delta = afterHandleRawAsset.uptimeNanoseconds - beforeHandleRawAsset.uptimeNanoseconds
                 timeHandlingRawAssets += Int64(delta)

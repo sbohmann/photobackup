@@ -81,7 +81,7 @@ class Core {
         }
     }
     
-    func upload(resources: [Resource], numberOfResources: Int) {
+    func upload(resources: [Resource], numberOfResources: Int, numberOfResourcesSuccesfullyUploaded: Int) {
         guard let resource = resources.first else {
             return
         }
@@ -104,7 +104,7 @@ class Core {
         
         guard let rawResource = rawResourceOption else {
             NSLog("Found no asset resources of name %@ for asset %@", resource.fileName, resource.localAssetId)
-            self.startNextUpload(resources: resources, numberOfResources: numberOfResources)
+            self.startNextUpload(resources: resources, numberOfResources: numberOfResources, numberOfResourcesSuccesfullyUploaded: numberOfResourcesSuccesfullyUploaded)
             return
         }
         
@@ -121,7 +121,7 @@ class Core {
         
         guard let inputStream = boundInputStream, let outputStream = boundOutputStream else {
             NSLog("%@ unable to create streams")
-            self.startNextUpload(resources: resources, numberOfResources: numberOfResources)
+            self.startNextUpload(resources: resources, numberOfResources: numberOfResources, numberOfResourcesSuccesfullyUploaded: numberOfResourcesSuccesfullyUploaded)
             return
         }
         
@@ -140,8 +140,10 @@ class Core {
             self.reportCompletion(data, response, error)
             if let error = error {
                 self.statusHandler("Error uploading resource \(resource.fileName): \(error)", nil)
+                self.startNextUpload(resources: resources, numberOfResources: numberOfResources, numberOfResourcesSuccesfullyUploaded: numberOfResourcesSuccesfullyUploaded)
+            } else {
+                self.startNextUpload(resources: resources, numberOfResources: numberOfResources, numberOfResourcesSuccesfullyUploaded: numberOfResourcesSuccesfullyUploaded + 1)
             }
-            self.startNextUpload(resources: resources, numberOfResources: numberOfResources)
         })
         if let size = resource.fileSize {
             NSLog("size: %d", size)
@@ -196,15 +198,16 @@ class Core {
         }
     }
     
-    private func startNextUpload(resources: [Resource], numberOfResources: Int) {
+    private func startNextUpload(resources: [Resource], numberOfResources: Int, numberOfResourcesSuccesfullyUploaded: Int) {
         let rest = [Resource](resources[1...])
         if !rest.isEmpty {
             DispatchQueue.main.async {
-                self.upload(resources: rest, numberOfResources: numberOfResources)
+                self.upload(resources: rest, numberOfResources: numberOfResources, numberOfResourcesSuccesfullyUploaded: numberOfResourcesSuccesfullyUploaded)
             }
-        } else {
-            // TODO report number of errors!!!
+        } else if (numberOfResourcesSuccesfullyUploaded == numberOfResources) {
             self.statusHandler("Finished uploading resources.", 1.0)
+        } else {
+            self.statusHandler("Failed to upload \(numberOfResources - numberOfResourcesSuccesfullyUploaded) out of \(numberOfResources) resources.", 1.0)
         }
     }
     
